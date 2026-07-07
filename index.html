@@ -1,0 +1,504 @@
+<script>
+  (function () {
+    var stored = localStorage.getItem("theme");
+    var prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+    var theme = stored || (prefersDark ? "dark" : "light");
+    if (theme === "dark") document.documentElement.classList.add("dark");
+  })();
+</script>
+
+<title>Ricky Siocon — AI Automation Specialist</title>
+<meta name="description" content="Ricky Siocon is an AI automation specialist who builds intelligent, AI-powered workflows that help businesses automate repetitive tasks and improve efficiency." />
+<meta property="og:title" content="Ricky Siocon — AI Automation Specialist" />
+<meta property="og:description" content="Systems that run themselves — AI-powered automation, integrations, and workflow engineering." />
+<meta property="og:image" content="brand_assets/myprofile.jpg" />
+<meta property="og:type" content="website" />
+<meta name="theme-color" content="#0E1A2B" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet" />
+
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+  tailwind.config = {
+    darkMode: "class",
+    theme: {
+      extend: {
+        fontFamily: {
+          display: ["Space Grotesk", "sans-serif"],
+          body: ["Inter", "sans-serif"],
+          mono: ["IBM Plex Mono", "monospace"],
+        },
+      },
+    },
+  };
+</script>
+
+<style>
+  :root {
+    --bg: #f5f1fa;
+    --bg-elevated: #ffffff;
+    --bg-elevated-2: #ebe1f5;
+    --ink: #281242;
+    --ink-soft: #4b3268;
+    --muted: #8676a0;
+    --copper: #c97a38;
+    --copper-ink: #ffffff;
+    --teal: #2e8b7c;
+    --line: #ddcfec;
+    --line-strong: #c0a8dc;
+    --shadow-rgb: 40, 18, 66;
+  }
+
+  .dark {
+    --bg: #0b0414;
+    --bg-elevated: #170b28;
+    --bg-elevated-2: #211238;
+    --ink: #f0e9fa;
+    --ink-soft: #c7b8de;
+    --muted: #8d7ba8;
+    --copper: #e0954f;
+    --copper-ink: #170b28;
+    --teal: #5fc7b8;
+    --line: #2a1a44;
+    --line-strong: #40295f;
+    --shadow-rgb: 3, 1, 10;
+  }
+
+  * { -webkit-tap-highlight-color: transparent; }
+
+  html { scroll-behavior: smooth; }
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+  }
+
+  body {
+    background-color: var(--bg);
+    color: var(--ink);
+    font-family: "Inter", sans-serif;
+    line-height: 1.7;
+    background-image:
+      linear-gradient(var(--line) 1px, transparent 1px),
+      linear-gradient(90deg, var(--line) 1px, transparent 1px);
+    background-size: 40px 40px;
+    background-attachment: fixed;
+    background-position: -1px -1px;
+    transition: background-color 0.3s ease, color 0.3s ease;
+  }
+
+  .grain {
+    pointer-events: none;
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    opacity: 0.035;
+    mix-blend-mode: overlay;
+  }
+  .dark .grain { opacity: 0.06; }
+
+  .display-tight {
+    font-family: "Space Grotesk", sans-serif;
+    letter-spacing: -0.03em;
+  }
+
+  .mono-label {
+    font-family: "IBM Plex Mono", monospace;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+
+  .surface {
+    background-color: var(--bg-elevated);
+    border: 1px solid var(--line);
+  }
+
+  .surface-2 {
+    background-color: var(--bg-elevated-2);
+    border: 1px solid var(--line);
+  }
+
+  .text-soft { color: var(--ink-soft); }
+  .text-muted { color: var(--muted); }
+  .text-copper { color: var(--copper); }
+  .text-teal { color: var(--teal); }
+  .border-line { border-color: var(--line); }
+
+  .shadow-copper {
+    box-shadow: 0 1px 2px rgba(var(--shadow-rgb), 0.06), 0 12px 32px -12px rgba(201, 122, 56, 0.28);
+  }
+  .shadow-lift {
+    box-shadow: 0 1px 2px rgba(var(--shadow-rgb), 0.08), 0 20px 40px -18px rgba(var(--shadow-rgb), 0.35);
+  }
+
+  /* Blueprint corner brackets */
+  .blueprint-card {
+    position: relative;
+  }
+  .blueprint-card::before,
+  .blueprint-card::after {
+    content: "";
+    position: absolute;
+    width: 14px;
+    height: 14px;
+    border: 1.5px solid var(--copper);
+    opacity: 0.55;
+    transition: opacity 0.3s ease;
+  }
+  .blueprint-card::before {
+    top: -1px;
+    left: -1px;
+    border-right: none;
+    border-bottom: none;
+  }
+  .blueprint-card::after {
+    bottom: -1px;
+    right: -1px;
+    border-left: none;
+    border-top: none;
+  }
+  .blueprint-card:hover::before,
+  .blueprint-card:hover::after {
+    opacity: 1;
+  }
+
+  .btn-primary {
+    background-color: var(--copper);
+    color: var(--copper-ink);
+    transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.25s ease, filter 0.2s ease;
+  }
+  .btn-primary:hover { transform: translateY(-2px); filter: brightness(1.06); }
+  .btn-primary:active { transform: translateY(0); }
+
+  .btn-ghost {
+    border: 1px solid var(--line-strong);
+    color: var(--ink);
+    transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.25s ease, background-color 0.25s ease;
+  }
+  .btn-ghost:hover { border-color: var(--copper); background-color: rgba(201, 122, 56, 0.08); transform: translateY(-2px); }
+  .btn-ghost:active { transform: translateY(0); }
+
+  a:focus-visible,
+  button:focus-visible,
+  [tabindex]:focus-visible {
+    outline: 2px solid var(--copper);
+    outline-offset: 3px;
+    border-radius: 2px;
+  }
+
+  .nav-link {
+    position: relative;
+    color: var(--ink-soft);
+    transition: color 0.2s ease;
+  }
+  .nav-link:hover { color: var(--ink); }
+  .nav-link::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: -4px;
+    width: 0%;
+    height: 1px;
+    background-color: var(--copper);
+    transition: width 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .nav-link:hover::after { width: 100%; }
+
+  .status-dot {
+    display: inline-block;
+    width: 7px;
+    height: 7px;
+    border-radius: 999px;
+    background-color: var(--teal);
+    box-shadow: 0 0 0 0 rgba(95, 199, 184, 0.6);
+    animation: pulse 2.2s ease-out infinite;
+  }
+  @keyframes pulse {
+    0% { box-shadow: 0 0 0 0 rgba(95, 199, 184, 0.5); }
+    70% { box-shadow: 0 0 0 8px rgba(95, 199, 184, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(95, 199, 184, 0); }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .status-dot { animation: none; }
+  }
+
+  /* Scroll reveal */
+  .reveal {
+    opacity: 0;
+    transform: translateY(18px);
+    transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1), transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .reveal.in-view {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .reveal { opacity: 1; transform: none; transition: none; }
+  }
+
+  ::selection {
+    background-color: var(--copper);
+    color: var(--copper-ink);
+  }
+</style>
+
+<svg class="grain" xmlns="http://www.w3.org/2000/svg">
+  <filter id="noise">
+    <feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" stitchTiles="stitch"></feTurbulence>
+    <feColorMatrix type="saturate" values="0"></feColorMatrix>
+  </filter>
+  <rect width="100%" height="100%" filter="url(#noise)"></rect>
+</svg>
+
+<!-- ============ NAV ============ -->
+<header class="fixed top-0 inset-x-0 z-50 backdrop-blur-md" style="background-color: color-mix(in srgb, var(--bg) 82%, transparent); border-bottom: 1px solid var(--line);">
+  <div class="max-w-6xl mx-auto px-6 md:px-10 h-16 flex items-center justify-between">
+    <a href="#top" class="display-tight text-lg font-semibold tracking-tight">
+      Ricky Siocon<span class="text-copper">.</span>
+    </a>
+    <nav class="hidden md:flex items-center gap-8 mono-label text-[11px]">
+      <a href="#about" class="nav-link"><span class="text-copper">01</span> About</a>
+      <a href="#skills" class="nav-link"><span class="text-copper">02</span> Skills</a>
+      <a href="#work" class="nav-link"><span class="text-copper">03</span> Work</a>
+      <a href="#contact" class="nav-link"><span class="text-copper">04</span> Contact</a>
+    </nav>
+    <div class="flex items-center gap-3">
+      <button id="theme-toggle" aria-label="Toggle dark and light mode" class="w-9 h-9 rounded-full surface-2 flex items-center justify-center transition-transform duration-300 hover:-translate-y-0.5">
+        <svg id="icon-sun" class="w-4 h-4 hidden dark:block" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"></path></svg>
+        <svg id="icon-moon" class="w-4 h-4 block dark:hidden" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.8A9 9 0 1 1 11.2 3 7 7 0 0 0 21 12.8Z"></path></svg>
+      </button>
+      <a href="#contact" class="hidden md:inline-flex btn-primary rounded-full px-4 py-2 text-sm font-medium">Get in touch</a>
+      <button id="menu-toggle" aria-label="Open menu" aria-expanded="false" aria-controls="mobile-menu" class="md:hidden w-9 h-9 rounded-full surface-2 flex items-center justify-center">
+        <svg id="icon-burger" class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"></path></svg>
+        <svg id="icon-close" class="w-4 h-4 hidden" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"></path></svg>
+      </button>
+    </div>
+  </div>
+  <nav id="mobile-menu" class="md:hidden hidden flex-col mono-label text-sm border-t border-line fixed inset-x-0 top-16 overflow-y-auto z-50" style="background-color: var(--bg); height: calc(100vh - 4rem);">
+    <a href="#about" class="nav-link px-6 py-4 border-b border-line"><span class="text-copper">01</span> About</a>
+    <a href="#skills" class="nav-link px-6 py-4 border-b border-line"><span class="text-copper">02</span> Skills</a>
+    <a href="#work" class="nav-link px-6 py-4 border-b border-line"><span class="text-copper">03</span> Work</a>
+    <a href="#contact" class="nav-link px-6 py-4"><span class="text-copper">04</span> Contact</a>
+  </nav>
+</header>
+
+<main id="top" class="relative z-[1] pt-16">
+  <!-- ============ PROFILE HEADER ============ -->
+  <section class="relative reveal in-view">
+    <div class="max-w-6xl mx-auto px-6 md:px-10">
+      <div class="pt-14 md:pt-20 relative z-10">
+        <img
+          src="brand_assets/myprofile.jpg"
+          alt="Ricky Siocon"
+          class="w-28 h-28 sm:w-32 sm:h-32 md:w-40 md:h-40 rounded-full object-cover shadow-lift"
+          style="border: 4px solid var(--bg);"
+        />
+      </div>
+      <div class="mt-6 pb-20 md:pb-28 max-w-xl">
+        <h1 class="display-tight text-4xl sm:text-5xl md:text-6xl font-semibold leading-[1.05] mb-2">Ricky Siocon</h1>
+        <div class="mono-label text-copper text-xs sm:text-sm mb-6">AI Automation Specialist</div>
+        <p class="text-soft text-base md:text-lg mb-8">
+          I build intelligent, AI-powered workflows with tools like Claude, ChatGPT, and n8n — turning repetitive busywork into systems that run without babysitting.
+        </p>
+        <div class="flex flex-wrap items-center gap-4 mb-10">
+          <a href="#work" class="btn-primary shadow-copper rounded-full px-6 py-3 text-sm font-medium">View my work</a>
+          <a href="#contact" class="btn-ghost rounded-full px-6 py-3 text-sm font-medium">Get in touch</a>
+        </div>
+        <div class="inline-flex items-center gap-2 mono-label text-[11px] surface-2 rounded-full px-3 py-1.5">
+          <span class="status-dot"></span> Available for projects
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ ABOUT ============ -->
+  <section id="about" class="max-w-6xl mx-auto px-6 md:px-10 py-20 md:py-28 border-t border-line reveal">
+    <div class="grid md:grid-cols-[1fr_2fr] gap-10 md:gap-16">
+      <div>
+        <div class="mono-label text-[11px] text-copper mb-3">About</div>
+        <h2 class="display-tight text-2xl md:text-3xl font-semibold leading-tight">I turn manual busywork into infrastructure.</h2>
+      </div>
+      <div class="space-y-6">
+        <p class="text-soft">
+          I'm an AI Automation Specialist passionate about building intelligent workflows and AI-powered solutions that help businesses automate repetitive tasks and improve efficiency.
+        </p>
+        <p class="text-soft">
+          I enjoy turning complex problems into simple, scalable systems — through continuous learning and hands-on development.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ SKILLS ============ -->
+  <section id="skills" class="max-w-6xl mx-auto px-6 md:px-10 py-20 md:py-28 border-t border-line reveal">
+    <div class="mono-label text-[11px] text-copper mb-3">Skills</div>
+    <h2 class="display-tight text-2xl md:text-3xl font-semibold leading-tight mb-10 max-w-xl">Fluent across the whole automation stack — from prompt to production.</h2>
+
+    <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+      <div class="blueprint-card surface rounded-lg p-5">
+        <div class="mono-label text-[11px] text-teal mb-3">AI &amp; LLM</div>
+        <ul class="space-y-1.5 text-sm text-soft">
+          <li class="flex items-center gap-2"><img src="https://cdn.simpleicons.org/claude" alt="" class="w-4 h-4 shrink-0" />Claude AI</li>
+          <li class="flex items-center gap-2"><img src="https://cdn.jsdelivr.net/npm/simple-icons@15.0.0/icons/openai.svg" alt="" class="w-4 h-4 shrink-0 dark:invert" />ChatGPT</li>
+        </ul>
+      </div>
+      <div class="blueprint-card surface rounded-lg p-5">
+        <div class="mono-label text-[11px] text-teal mb-3">Automation Platforms</div>
+        <ul class="space-y-1.5 text-sm text-soft">
+          <li class="flex items-center gap-2"><img src="https://cdn.simpleicons.org/n8n" alt="" class="w-4 h-4 shrink-0" />n8n</li>
+          <li class="flex items-center gap-2"><img src="https://cdn.simpleicons.org/zapier" alt="" class="w-4 h-4 shrink-0" />Zapier</li>
+        </ul>
+      </div>
+      <div class="blueprint-card surface rounded-lg p-5">
+        <div class="mono-label text-[11px] text-teal mb-3">Data &amp; Infrastructure</div>
+        <ul class="space-y-1.5 text-sm text-soft">
+          <li class="flex items-center gap-2"><img src="https://cdn.simpleicons.org/supabase" alt="" class="w-4 h-4 shrink-0" />Supabase</li>
+          <li class="flex items-center gap-2"><span class="w-4 h-4 shrink-0 rounded-full flex items-center justify-center text-[9px] font-bold" style="background-color:var(--teal); color:var(--bg-elevated);">P</span>Pinecone</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ WORK / CAPABILITIES ============ -->
+  <section id="work" class="max-w-6xl mx-auto px-6 md:px-10 py-20 md:py-28 border-t border-line reveal">
+    <div class="mb-12">
+      <div class="mono-label text-[11px] text-copper mb-3">What I Automate</div>
+      <h2 class="display-tight text-2xl md:text-3xl font-semibold leading-tight max-w-xl mb-3">Where repetitive work quietly disappears.</h2>
+      <p class="text-muted text-sm max-w-lg">Four places AI automation earns back the most hours — every one built on the same real stack: Claude AI, ChatGPT, n8n, Zapier, Supabase, and Pinecone.</p>
+    </div>
+
+    <div class="grid md:grid-cols-2 gap-6">
+      <article class="blueprint-card surface rounded-xl p-7 transition-transform duration-300 hover:-translate-y-1 hover:shadow-lift">
+        <span class="mono-label text-[10px] surface-2 rounded-full px-3 py-1 inline-block mb-5">Sales &amp; CRM</span>
+        <h3 class="display-tight text-xl font-semibold mb-2">Lead-to-CRM Automation</h3>
+        <p class="text-soft text-sm mb-5">Capture new leads the moment they come in, qualify them with AI, and sync everything straight into your CRM — no manual entry, no dropped follow-ups.</p>
+        <div class="flex flex-wrap gap-2">
+          <span class="mono-label text-[10px] text-muted border border-line rounded px-2 py-1">n8n</span>
+          <span class="mono-label text-[10px] text-muted border border-line rounded px-2 py-1">Claude AI</span>
+          <span class="mono-label text-[10px] text-muted border border-line rounded px-2 py-1">Supabase</span>
+        </div>
+      </article>
+
+      <article class="blueprint-card surface rounded-xl p-7 transition-transform duration-300 hover:-translate-y-1 hover:shadow-lift">
+        <span class="mono-label text-[10px] surface-2 rounded-full px-3 py-1 inline-block mb-5">Customer Support</span>
+        <h3 class="display-tight text-xl font-semibold mb-2">Ticket Triage &amp; Response Drafting</h3>
+        <p class="text-soft text-sm mb-5">Classify incoming support tickets, route them to the right queue, and draft first-response replies your team can approve in seconds.</p>
+        <div class="flex flex-wrap gap-2">
+          <span class="mono-label text-[10px] text-muted border border-line rounded px-2 py-1">ChatGPT</span>
+          <span class="mono-label text-[10px] text-muted border border-line rounded px-2 py-1">Zapier</span>
+          <span class="mono-label text-[10px] text-muted border border-line rounded px-2 py-1">n8n</span>
+        </div>
+      </article>
+
+      <article class="blueprint-card surface rounded-xl p-7 transition-transform duration-300 hover:-translate-y-1 hover:shadow-lift">
+        <span class="mono-label text-[10px] surface-2 rounded-full px-3 py-1 inline-block mb-5">Data &amp; Knowledge</span>
+        <h3 class="display-tight text-xl font-semibold mb-2">RAG-Powered Knowledge Search</h3>
+        <p class="text-soft text-sm mb-5">Turn scattered docs, PDFs, and spreadsheets into a searchable knowledge base your team — or your customers — can just ask questions to.</p>
+        <div class="flex flex-wrap gap-2">
+          <span class="mono-label text-[10px] text-muted border border-line rounded px-2 py-1">Pinecone</span>
+          <span class="mono-label text-[10px] text-muted border border-line rounded px-2 py-1">Claude AI</span>
+          <span class="mono-label text-[10px] text-muted border border-line rounded px-2 py-1">Supabase</span>
+        </div>
+      </article>
+
+      <article class="blueprint-card surface rounded-xl p-7 transition-transform duration-300 hover:-translate-y-1 hover:shadow-lift">
+        <span class="mono-label text-[10px] surface-2 rounded-full px-3 py-1 inline-block mb-5">Operations</span>
+        <h3 class="display-tight text-xl font-semibold mb-2">Reporting &amp; Workflow Automation</h3>
+        <p class="text-soft text-sm mb-5">Replace manual spreadsheet updates and status meetings with pipelines that pull, calculate, and report the numbers on their own schedule.</p>
+        <div class="flex flex-wrap gap-2">
+          <span class="mono-label text-[10px] text-muted border border-line rounded px-2 py-1">n8n</span>
+          <span class="mono-label text-[10px] text-muted border border-line rounded px-2 py-1">Supabase</span>
+          <span class="mono-label text-[10px] text-muted border border-line rounded px-2 py-1">Zapier</span>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <!-- ============ CONTACT ============ -->
+  <section id="contact" class="max-w-6xl mx-auto px-6 md:px-10 py-20 md:py-28 border-t border-line reveal">
+    <div class="surface blueprint-card rounded-2xl p-10 md:p-16 text-center max-w-3xl mx-auto shadow-lift">
+      <div class="mono-label text-[11px] text-copper mb-4">Contact</div>
+      <h2 class="display-tight text-3xl md:text-4xl font-semibold mb-4">Let's automate something.</h2>
+      <p class="text-soft max-w-lg mx-auto mb-8">
+        Spending too much time on repetitive work? Share your current process, and I'll help you identify what can be automated to save time, reduce errors, and improve efficiency.
+      </p>
+      <div class="flex flex-wrap items-center justify-center gap-4 mb-8">
+        <a href="mailto:sioconricky@gmail.com" class="btn-primary shadow-copper rounded-full px-6 py-3 text-sm font-medium">sioconricky@gmail.com</a>
+        <a
+          href="https://www.linkedin.com/in/ricky-siocon-82552228b/"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="btn-primary shadow-copper rounded-full px-6 py-3 text-sm font-medium inline-flex items-center gap-2"
+        >
+          <svg class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" /></svg>
+          LinkedIn
+        </a>
+      </div>
+    </div>
+  </section>
+</main>
+
+<!-- ============ FOOTER ============ -->
+<footer class="border-t border-line">
+  <div class="max-w-6xl mx-auto px-6 md:px-10 py-8 flex flex-col sm:flex-row items-center justify-between gap-4">
+    <div class="mono-label text-[11px] text-muted">© 2026 Ricky Siocon. Built with intent, not templates.</div>
+    <a href="#top" class="nav-link mono-label text-[11px]">Back to top ↑</a>
+  </div>
+</footer>
+
+<script>
+  var toggleBtn = document.getElementById("theme-toggle");
+  toggleBtn.addEventListener("click", function () {
+    var root = document.documentElement;
+    var isDark = root.classList.toggle("dark");
+    localStorage.setItem("theme", isDark ? "dark" : "light");
+  });
+
+  var menuToggle = document.getElementById("menu-toggle");
+  var mobileMenu = document.getElementById("mobile-menu");
+  var iconBurger = document.getElementById("icon-burger");
+  var iconClose = document.getElementById("icon-close");
+  function closeMenu() {
+    mobileMenu.classList.add("hidden");
+    mobileMenu.classList.remove("flex");
+    menuToggle.setAttribute("aria-expanded", "false");
+    iconBurger.classList.remove("hidden");
+    iconClose.classList.add("hidden");
+  }
+  menuToggle.addEventListener("click", function () {
+    var isOpen = menuToggle.getAttribute("aria-expanded") === "true";
+    if (isOpen) {
+      closeMenu();
+    } else {
+      mobileMenu.classList.remove("hidden");
+      mobileMenu.classList.add("flex");
+      menuToggle.setAttribute("aria-expanded", "true");
+      iconBurger.classList.add("hidden");
+      iconClose.classList.remove("hidden");
+    }
+  });
+  mobileMenu.querySelectorAll("a").forEach(function (link) {
+    link.addEventListener("click", closeMenu);
+  });
+
+  var prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  var reveals = document.querySelectorAll(".reveal");
+  if (prefersReducedMotion || !("IntersectionObserver" in window)) {
+    reveals.forEach(function (el) { el.classList.add("in-view"); });
+  } else {
+    var io = new IntersectionObserver(
+      function (entries) {
+        entries.forEach(function (entry) {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("in-view");
+            io.unobserve(entry.target);
+          }
+        });
+      },
+      { threshold: 0.15 }
+    );
+    reveals.forEach(function (el) { io.observe(el); });
+  }
+</script>
