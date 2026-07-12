@@ -79,13 +79,50 @@
     color: var(--ink);
     font-family: "Inter", sans-serif;
     line-height: 1.7;
-    background-image:
-      linear-gradient(var(--line) 1px, transparent 1px),
-      linear-gradient(90deg, var(--line) 1px, transparent 1px);
-    background-size: 40px 40px;
-    background-attachment: fixed;
-    background-position: -1px -1px;
     transition: background-color 0.3s ease, color 0.3s ease;
+  }
+
+  /* Ambient drifting signal lines (replaces the old static grid) */
+  .bg-lines {
+    pointer-events: none;
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    overflow: hidden;
+  }
+  .bg-lines i {
+    position: absolute;
+    display: block;
+    height: 1px;
+    border-radius: 999px;
+    background: linear-gradient(90deg, transparent, var(--line-strong), transparent);
+    animation: glide-x 20s ease-in-out infinite alternate;
+    will-change: transform;
+  }
+  .bg-lines i.v {
+    width: 1px;
+    background: linear-gradient(180deg, transparent, var(--line-strong), transparent);
+    animation-name: glide-y;
+  }
+  @keyframes glide-x {
+    from { transform: translateX(-24vw); }
+    to { transform: translateX(24vw); }
+  }
+  @keyframes glide-y {
+    from { transform: translateY(-18vh); }
+    to { transform: translateY(18vh); }
+  }
+  .bg-lines i:nth-child(1) { top: 12%; left: 6%; width: 34vw; animation-duration: 18s; }
+  .bg-lines i:nth-child(2) { top: 27%; left: 56%; width: 26vw; animation-duration: 26s; animation-delay: -8s; background: linear-gradient(90deg, transparent, var(--copper), transparent); opacity: 0.35; }
+  .bg-lines i:nth-child(3) { top: 45%; left: 18%; width: 42vw; animation-duration: 22s; animation-delay: -14s; }
+  .bg-lines i:nth-child(4) { top: 63%; left: 58%; width: 30vw; animation-duration: 28s; animation-delay: -4s; background: linear-gradient(90deg, transparent, var(--teal), transparent); opacity: 0.3; }
+  .bg-lines i:nth-child(5) { top: 81%; left: 10%; width: 38vw; animation-duration: 24s; animation-delay: -11s; }
+  .bg-lines i:nth-child(6) { top: 92%; left: 48%; width: 24vw; animation-duration: 19s; animation-delay: -6s; opacity: 0.6; }
+  .bg-lines i:nth-child(7) { top: 8%;  left: 30%; height: 22vh; animation-duration: 27s; animation-delay: -9s; }
+  .bg-lines i:nth-child(8) { top: 38%; left: 78%; height: 26vh; animation-duration: 21s; animation-delay: -16s; opacity: 0.6; }
+  .bg-lines i:nth-child(9) { top: 60%; left: 8%;  height: 20vh; animation-duration: 25s; animation-delay: -2s; }
+  @media (prefers-reduced-motion: reduce) {
+    .bg-lines i { animation: none; }
   }
 
   .grain {
@@ -242,6 +279,39 @@
     background-color: var(--copper);
     color: var(--copper-ink);
   }
+
+  /* Stack marquee */
+  .marquee-mask {
+    -webkit-mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
+    mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
+  }
+  .marquee-track {
+    width: max-content;
+    animation: marquee-scroll 32s linear infinite;
+  }
+  @keyframes marquee-scroll {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .marquee-track { animation: none; }
+    .marquee-mask { overflow-x: auto; }
+  }
+
+  /* Section label badge */
+  .badge-yellow {
+    display: inline-block;
+    background-color: #facc15;
+    border: 1px solid #a16207;
+    color: #422006;
+    border-radius: 999px;
+    padding: 0.25rem 0.85rem;
+  }
+  .dark .badge-yellow {
+    background-color: #fbbf24;
+    border-color: #92400e;
+    color: #1c0f00;
+  }
 </style>
 
 <svg class="grain" xmlns="http://www.w3.org/2000/svg">
@@ -252,6 +322,10 @@
   <rect width="100%" height="100%" filter="url(#noise)"></rect>
 </svg>
 
+<div class="bg-lines" aria-hidden="true">
+  <i></i><i></i><i></i><i></i><i></i><i></i><i class="v"></i><i class="v"></i><i class="v"></i>
+</div>
+
 <!-- ============ NAV ============ -->
 <header class="fixed top-0 inset-x-0 z-50 backdrop-blur-md" style="background-color: color-mix(in srgb, var(--bg) 82%, transparent); border-bottom: 1px solid var(--line);">
   <div class="max-w-6xl mx-auto px-6 md:px-10 h-16 flex items-center justify-between">
@@ -260,7 +334,7 @@
     </a>
     <nav class="hidden md:flex items-center gap-8 mono-label text-[11px]">
       <a href="#about" class="nav-link"><span class="text-copper">01</span> About</a>
-      <a href="#skills" class="nav-link"><span class="text-copper">02</span> Skills</a>
+      <a href="#stack" class="nav-link"><span class="text-copper">02</span> Stack</a>
       <a href="#work" class="nav-link"><span class="text-copper">03</span> Work</a>
       <a href="#contact" class="nav-link"><span class="text-copper">04</span> Contact</a>
     </nav>
@@ -278,7 +352,7 @@
   </div>
   <nav id="mobile-menu" class="md:hidden hidden flex-col mono-label text-sm border-t border-line fixed inset-x-0 top-16 overflow-y-auto z-50" style="background-color: var(--bg); height: calc(100vh - 4rem);">
     <a href="#about" class="nav-link px-6 py-4 border-b border-line"><span class="text-copper">01</span> About</a>
-    <a href="#skills" class="nav-link px-6 py-4 border-b border-line"><span class="text-copper">02</span> Skills</a>
+    <a href="#stack" class="nav-link px-6 py-4 border-b border-line"><span class="text-copper">02</span> Stack</a>
     <a href="#work" class="nav-link px-6 py-4 border-b border-line"><span class="text-copper">03</span> Work</a>
     <a href="#contact" class="nav-link px-6 py-4"><span class="text-copper">04</span> Contact</a>
   </nav>
@@ -287,27 +361,31 @@
 <main id="top" class="relative z-[1] pt-16">
   <!-- ============ PROFILE HEADER ============ -->
   <section class="relative reveal in-view">
-    <div class="max-w-6xl mx-auto px-6 md:px-10">
-      <div class="pt-14 md:pt-20 relative z-10">
-        <img
-          src="brand_assets/myprofile.jpg"
-          alt="Ricky Siocon"
-          class="w-28 h-28 sm:w-32 sm:h-32 md:w-40 md:h-40 rounded-full object-cover shadow-lift"
-          style="border: 4px solid var(--bg);"
-        />
-      </div>
-      <div class="mt-6 pb-20 md:pb-28 max-w-xl">
-        <h1 class="display-tight text-4xl sm:text-5xl md:text-6xl font-semibold leading-[1.05] mb-2">Ricky Siocon</h1>
-        <div class="mono-label text-copper text-xs sm:text-sm mb-6">AI Automation Specialist</div>
-        <p class="text-soft text-base md:text-lg mb-8">
-          I build intelligent, AI-powered workflows with tools like Claude, ChatGPT, and n8n — turning repetitive busywork into systems that run without babysitting.
-        </p>
-        <div class="flex flex-wrap items-center gap-4 mb-10">
-          <a href="#work" class="btn-primary shadow-copper rounded-full px-6 py-3 text-sm font-medium">View my work</a>
-          <a href="#contact" class="btn-ghost rounded-full px-6 py-3 text-sm font-medium">Get in touch</a>
+    <div class="max-w-6xl mx-auto px-6 md:px-10 pt-14 pb-20 md:pt-20 md:pb-28">
+      <div class="md:grid md:grid-cols-[1fr_auto] md:items-center md:gap-16">
+        <div class="max-w-xl md:max-w-2xl">
+          <h1 class="display-tight text-4xl sm:text-5xl md:text-6xl font-semibold leading-[1.05] mb-2">Ricky Siocon</h1>
+          <div class="mono-label text-copper text-xs sm:text-sm mb-6">AI Automation Specialist</div>
+          <p class="text-soft text-base md:text-lg mb-8">
+            I focus on automation — mainly with <span class="text-ink font-medium">Claude</span>, while exploring n8n and Zapier as alternatives. To prove I can build beyond automation, I shipped two browser games, Gridrunner and Deep Dive Fishing. I also bring working knowledge of Pinecone and Supabase for database and RAG-driven projects.
+          </p>
+          <div class="flex flex-wrap items-center gap-4 mb-10">
+            <a href="#work" class="btn-primary shadow-copper rounded-full px-6 py-3 text-sm font-medium">View my work</a>
+            <a href="#contact" class="btn-ghost rounded-full px-6 py-3 text-sm font-medium">Get in touch</a>
+          </div>
+          <div class="inline-flex items-center gap-2 mono-label text-[11px] surface-2 rounded-full px-3 py-1.5">
+            <span class="status-dot"></span> Available for projects
+          </div>
         </div>
-        <div class="inline-flex items-center gap-2 mono-label text-[11px] surface-2 rounded-full px-3 py-1.5">
-          <span class="status-dot"></span> Available for projects
+        <div class="relative z-10 shrink-0 mx-auto md:mx-0 mt-10 md:mt-0 w-fit">
+          <div class="absolute -inset-5 rounded-full border border-line-strong opacity-70" aria-hidden="true"></div>
+          <div class="absolute -inset-9 rounded-full border border-line opacity-40" aria-hidden="true"></div>
+          <img
+            src="brand_assets/myprofile.jpg"
+            alt="Ricky Siocon"
+            class="relative w-40 h-40 sm:w-48 sm:h-48 md:w-64 md:h-64 lg:w-72 lg:h-72 rounded-full object-cover shadow-lift"
+            style="border: 4px solid var(--bg);"
+          />
         </div>
       </div>
     </div>
@@ -317,7 +395,7 @@
   <section id="about" class="max-w-6xl mx-auto px-6 md:px-10 py-20 md:py-28 border-t border-line reveal">
     <div class="grid md:grid-cols-[1fr_2fr] gap-10 md:gap-16">
       <div>
-        <div class="mono-label text-[11px] text-copper mb-3">About</div>
+        <div class="mono-label badge-yellow text-[11px] mb-3">About</div>
         <h2 class="display-tight text-2xl md:text-3xl font-semibold leading-tight">I turn manual busywork into infrastructure.</h2>
       </div>
       <div class="space-y-6">
@@ -331,109 +409,186 @@
     </div>
   </section>
 
-  <!-- ============ SKILLS ============ -->
-  <section id="skills" class="max-w-6xl mx-auto px-6 md:px-10 py-20 md:py-28 border-t border-line reveal">
-    <div class="mono-label text-[11px] text-copper mb-3">Skills</div>
-    <h2 class="display-tight text-2xl md:text-3xl font-semibold leading-tight mb-10 max-w-xl">Fluent across the whole automation stack — from prompt to production.</h2>
+  <!-- ============ STACK ============ -->
+  <section id="stack" class="py-20 md:py-28 border-t border-line reveal overflow-hidden">
+    <div class="max-w-6xl mx-auto px-6 md:px-10">
+      <div class="mono-label badge-yellow text-[11px] mb-3">Stack</div>
+      <h2 class="display-tight text-2xl md:text-3xl font-semibold leading-tight mb-10 max-w-xl">The stack I build with.</h2>
+    </div>
 
-    <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
-      <div class="blueprint-card surface rounded-lg p-5">
-        <div class="mono-label text-[11px] text-teal mb-3">AI &amp; LLM</div>
-        <ul class="space-y-1.5 text-sm text-soft">
-          <li class="flex items-center gap-2"><img src="https://cdn.simpleicons.org/claude" alt="" class="w-4 h-4 shrink-0" />Claude AI</li>
-          <li class="flex items-center gap-2"><img src="https://cdn.jsdelivr.net/npm/simple-icons@15.0.0/icons/openai.svg" alt="" class="w-4 h-4 shrink-0 dark:invert" />ChatGPT</li>
-        </ul>
-      </div>
-      <div class="blueprint-card surface rounded-lg p-5">
-        <div class="mono-label text-[11px] text-teal mb-3">Automation Platforms</div>
-        <ul class="space-y-1.5 text-sm text-soft">
-          <li class="flex items-center gap-2"><img src="https://cdn.simpleicons.org/n8n" alt="" class="w-4 h-4 shrink-0" />n8n</li>
-          <li class="flex items-center gap-2"><img src="https://cdn.simpleicons.org/zapier" alt="" class="w-4 h-4 shrink-0" />Zapier</li>
-        </ul>
-      </div>
-      <div class="blueprint-card surface rounded-lg p-5">
-        <div class="mono-label text-[11px] text-teal mb-3">Data &amp; Infrastructure</div>
-        <ul class="space-y-1.5 text-sm text-soft">
-          <li class="flex items-center gap-2"><img src="https://cdn.simpleicons.org/supabase" alt="" class="w-4 h-4 shrink-0" />Supabase</li>
-          <li class="flex items-center gap-2"><span class="w-4 h-4 shrink-0 rounded-full flex items-center justify-center text-[9px] font-bold" style="background-color:var(--teal); color:var(--bg-elevated);">P</span>Pinecone</li>
-        </ul>
+    <div class="marquee-mask">
+      <div class="marquee-track flex items-center gap-4">
+        <!-- set 1 -->
+        <span class="blueprint-card surface-2 inline-flex items-center gap-2.5 text-sm md:text-base text-soft shrink-0 rounded-lg px-5 py-3"><img src="https://cdn.simpleicons.org/claude" alt="" class="w-5 h-5 shrink-0" />Claude AI</span>
+        <span class="blueprint-card surface-2 inline-flex items-center gap-2.5 text-sm md:text-base text-soft shrink-0 rounded-lg px-5 py-3"><img src="https://cdn.jsdelivr.net/npm/simple-icons@15.0.0/icons/openai.svg" alt="" class="w-5 h-5 shrink-0 dark:invert" />ChatGPT</span>
+        <span class="blueprint-card surface-2 inline-flex items-center gap-2.5 text-sm md:text-base text-soft shrink-0 rounded-lg px-5 py-3"><img src="https://cdn.simpleicons.org/n8n" alt="" class="w-5 h-5 shrink-0" />n8n</span>
+        <span class="blueprint-card surface-2 inline-flex items-center gap-2.5 text-sm md:text-base text-soft shrink-0 rounded-lg px-5 py-3"><img src="https://cdn.simpleicons.org/zapier" alt="" class="w-5 h-5 shrink-0" />Zapier</span>
+        <span class="blueprint-card surface-2 inline-flex items-center gap-2.5 text-sm md:text-base text-soft shrink-0 rounded-lg px-5 py-3"><img src="https://cdn.simpleicons.org/supabase" alt="" class="w-5 h-5 shrink-0" />Supabase</span>
+        <span class="blueprint-card surface-2 inline-flex items-center gap-2.5 text-sm md:text-base text-soft shrink-0 rounded-lg px-5 py-3"><span class="w-5 h-5 shrink-0 rounded-full flex items-center justify-center text-[10px] font-bold" style="background-color:var(--teal); color:var(--bg-elevated);">P</span>Pinecone</span>
+        <!-- set 2 (duplicate for seamless loop) -->
+        <span class="blueprint-card surface-2 inline-flex items-center gap-2.5 text-sm md:text-base text-soft shrink-0 rounded-lg px-5 py-3" aria-hidden="true"><img src="https://cdn.simpleicons.org/claude" alt="" class="w-5 h-5 shrink-0" />Claude AI</span>
+        <span class="blueprint-card surface-2 inline-flex items-center gap-2.5 text-sm md:text-base text-soft shrink-0 rounded-lg px-5 py-3" aria-hidden="true"><img src="https://cdn.jsdelivr.net/npm/simple-icons@15.0.0/icons/openai.svg" alt="" class="w-5 h-5 shrink-0 dark:invert" />ChatGPT</span>
+        <span class="blueprint-card surface-2 inline-flex items-center gap-2.5 text-sm md:text-base text-soft shrink-0 rounded-lg px-5 py-3" aria-hidden="true"><img src="https://cdn.simpleicons.org/n8n" alt="" class="w-5 h-5 shrink-0" />n8n</span>
+        <span class="blueprint-card surface-2 inline-flex items-center gap-2.5 text-sm md:text-base text-soft shrink-0 rounded-lg px-5 py-3" aria-hidden="true"><img src="https://cdn.simpleicons.org/zapier" alt="" class="w-5 h-5 shrink-0" />Zapier</span>
+        <span class="blueprint-card surface-2 inline-flex items-center gap-2.5 text-sm md:text-base text-soft shrink-0 rounded-lg px-5 py-3" aria-hidden="true"><img src="https://cdn.simpleicons.org/supabase" alt="" class="w-5 h-5 shrink-0" />Supabase</span>
+        <span class="blueprint-card surface-2 inline-flex items-center gap-2.5 text-sm md:text-base text-soft shrink-0 rounded-lg px-5 py-3" aria-hidden="true"><span class="w-5 h-5 shrink-0 rounded-full flex items-center justify-center text-[10px] font-bold" style="background-color:var(--teal); color:var(--bg-elevated);">P</span>Pinecone</span>
       </div>
     </div>
   </section>
 
-  <!-- ============ WORK / CAPABILITIES ============ -->
+  <!-- ============ WORK / PROJECTS + CAPABILITIES ============ -->
   <section id="work" class="max-w-6xl mx-auto px-6 md:px-10 py-20 md:py-28 border-t border-line reveal">
-    <div class="mb-12">
-      <div class="mono-label text-[11px] text-copper mb-3">What I Automate</div>
-      <h2 class="display-tight text-2xl md:text-3xl font-semibold leading-tight max-w-xl mb-3">Where repetitive work quietly disappears.</h2>
-      <p class="text-muted text-sm max-w-lg">Four places AI automation earns back the most hours — every one built on the same real stack: Claude AI, ChatGPT, n8n, Zapier, Supabase, and Pinecone.</p>
+    <div class="mb-10">
+      <div class="mono-label badge-yellow text-[11px] mb-3">Work</div>
+      <h2 class="display-tight text-2xl md:text-3xl font-semibold leading-tight max-w-xl mb-3">Featured projects.</h2>
+      <p class="text-muted text-sm max-w-lg">A multi-agent Claude skill for AI-automation research, plus two shipped games — built end to end, from mechanics to deployment.</p>
     </div>
 
-    <div class="grid md:grid-cols-2 gap-6">
-      <article class="blueprint-card surface rounded-xl p-7 transition-transform duration-300 hover:-translate-y-1 hover:shadow-lift">
-        <span class="mono-label text-[10px] surface-2 rounded-full px-3 py-1 inline-block mb-5">Sales &amp; CRM</span>
-        <h3 class="display-tight text-xl font-semibold mb-2">Lead-to-CRM Automation</h3>
-        <p class="text-soft text-sm mb-5">Capture new leads the moment they come in, qualify them with AI, and sync everything straight into your CRM — no manual entry, no dropped follow-ups.</p>
-        <div class="flex flex-wrap gap-2">
-          <span class="mono-label text-[10px] text-muted border border-line rounded px-2 py-1">n8n</span>
-          <span class="mono-label text-[10px] text-muted border border-line rounded px-2 py-1">Claude AI</span>
-          <span class="mono-label text-[10px] text-muted border border-line rounded px-2 py-1">Supabase</span>
+    <div class="grid md:grid-cols-3 gap-6">
+      <article class="blueprint-card surface rounded-xl overflow-hidden transition-transform duration-300 hover:-translate-y-1 hover:shadow-lift flex flex-col">
+        <img
+          src="brand_assets/projects/phleadgen_poster.svg"
+          alt="PH Lead Generator diagram — automation workflow from input through n8n and Claude AI to reports"
+          class="w-full aspect-video object-cover border-b border-line"
+          width="1600"
+          height="1000"
+        />
+        <div class="p-6 flex flex-col flex-1">
+          <span class="mono-label text-[10px] surface-2 rounded-full px-3 py-1 inline-block mb-4 self-start">Claude Agent Skill</span>
+          <h3 class="display-tight text-lg font-semibold mb-2">PH Lead Generator</h3>
+          <p class="text-soft text-sm mb-5 flex-1">Built with 5 specialized Claude subagents — each with its own persona and role — that research, score, and validate AI-automation opportunities for Philippine businesses.</p>
+          <div class="flex flex-wrap gap-2 mb-5">
+            <span class="mono-label text-[10px] text-muted border border-line rounded px-2 py-1">Claude AI</span>
+            <span class="mono-label text-[10px] text-muted border border-line rounded px-2 py-1">n8n</span>
+            <span class="mono-label text-[10px] text-muted border border-line rounded px-2 py-1">Pinecone</span>
+            <span class="mono-label text-[10px] text-muted border border-line rounded px-2 py-1">Supabase</span>
+          </div>
+          <div class="flex flex-wrap gap-2">
+            <button
+              id="ph-enlarge-btn"
+              type="button"
+              class="btn-ghost rounded-full px-4 py-2 text-sm font-medium inline-flex items-center justify-center gap-1.5"
+            >
+              Make it larger
+              <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7" /></svg>
+            </button>
+            <a
+              href="brand_assets/projects/ph-lead-sample-report.html"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="btn-ghost rounded-full px-4 py-2 text-sm font-medium inline-flex items-center justify-center gap-1.5"
+            >
+              Sample report
+              <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M7 7h10v10" /></svg>
+            </a>
+          </div>
         </div>
       </article>
 
-      <article class="blueprint-card surface rounded-xl p-7 transition-transform duration-300 hover:-translate-y-1 hover:shadow-lift">
-        <span class="mono-label text-[10px] surface-2 rounded-full px-3 py-1 inline-block mb-5">Customer Support</span>
-        <h3 class="display-tight text-xl font-semibold mb-2">Ticket Triage &amp; Response Drafting</h3>
-        <p class="text-soft text-sm mb-5">Classify incoming support tickets, route them to the right queue, and draft first-response replies your team can approve in seconds.</p>
-        <div class="flex flex-wrap gap-2">
-          <span class="mono-label text-[10px] text-muted border border-line rounded px-2 py-1">ChatGPT</span>
-          <span class="mono-label text-[10px] text-muted border border-line rounded px-2 py-1">Zapier</span>
-          <span class="mono-label text-[10px] text-muted border border-line rounded px-2 py-1">n8n</span>
+      <article class="blueprint-card surface rounded-xl overflow-hidden transition-transform duration-300 hover:-translate-y-1 hover:shadow-lift flex flex-col">
+        <img
+          src="brand_assets/projects/gridrunner_poster.svg"
+          alt="Gridrunner title screen — a stick-figure runner mid-jump on a neon synthwave grid"
+          class="w-full aspect-video object-cover border-b border-line"
+          width="1600"
+          height="1000"
+        />
+        <div class="p-6 flex flex-col flex-1">
+          <span class="mono-label text-[10px] surface-2 rounded-full px-3 py-1 inline-block mb-4 self-start">Game</span>
+          <h3 class="display-tight text-lg font-semibold mb-2">Gridrunner</h3>
+          <p class="text-soft text-sm mb-5 flex-1">An endless signal run through a synthwave grid — jump, slide, and chain shield, decoy, and laser power-ups to survive.</p>
+          <div class="flex flex-wrap gap-2 mb-5">
+            <span class="mono-label text-[10px] text-muted border border-line rounded px-2 py-1">JavaScript</span>
+            <span class="mono-label text-[10px] text-muted border border-line rounded px-2 py-1">Canvas</span>
+            <span class="mono-label text-[10px] text-muted border border-line rounded px-2 py-1">Vercel</span>
+          </div>
+          <a
+            href="https://stickrunricky.vercel.app"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="btn-ghost rounded-full px-4 py-2 text-sm font-medium inline-flex items-center justify-center gap-1.5 self-start"
+          >
+            Play now
+            <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M7 7h10v10" /></svg>
+          </a>
         </div>
       </article>
 
-      <article class="blueprint-card surface rounded-xl p-7 transition-transform duration-300 hover:-translate-y-1 hover:shadow-lift">
-        <span class="mono-label text-[10px] surface-2 rounded-full px-3 py-1 inline-block mb-5">Data &amp; Knowledge</span>
-        <h3 class="display-tight text-xl font-semibold mb-2">RAG-Powered Knowledge Search</h3>
-        <p class="text-soft text-sm mb-5">Turn scattered docs, PDFs, and spreadsheets into a searchable knowledge base your team — or your customers — can just ask questions to.</p>
-        <div class="flex flex-wrap gap-2">
-          <span class="mono-label text-[10px] text-muted border border-line rounded px-2 py-1">Pinecone</span>
-          <span class="mono-label text-[10px] text-muted border border-line rounded px-2 py-1">Claude AI</span>
-          <span class="mono-label text-[10px] text-muted border border-line rounded px-2 py-1">Supabase</span>
+      <article class="blueprint-card surface rounded-xl overflow-hidden transition-transform duration-300 hover:-translate-y-1 hover:shadow-lift flex flex-col">
+        <img
+          src="brand_assets/projects/deepdiver_poster.svg"
+          alt="Deep Dive Fishing title screen — a diver swimming underwater among fish near a boat"
+          class="w-full aspect-video object-cover border-b border-line"
+          width="1600"
+          height="1000"
+        />
+        <div class="p-6 flex flex-col flex-1">
+          <span class="mono-label text-[10px] surface-2 rounded-full px-3 py-1 inline-block mb-4 self-start">Game</span>
+          <h3 class="display-tight text-lg font-semibold mb-2">Deep Dive Fishing</h3>
+          <p class="text-soft text-sm mb-5 flex-1">An arcade diving-and-fishing game — manage oxygen, catch fish, and upgrade your gear on the way to the abyss.</p>
+          <div class="flex flex-wrap gap-2 mb-5">
+            <span class="mono-label text-[10px] text-muted border border-line rounded px-2 py-1">JavaScript</span>
+            <span class="mono-label text-[10px] text-muted border border-line rounded px-2 py-1">Canvas</span>
+            <span class="mono-label text-[10px] text-muted border border-line rounded px-2 py-1">Vercel</span>
+          </div>
+          <a
+            href="https://deep-dive-fishing.vercel.app/"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="btn-ghost rounded-full px-4 py-2 text-sm font-medium inline-flex items-center justify-center gap-1.5 self-start"
+          >
+            Play now
+            <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M7 7h10v10" /></svg>
+          </a>
         </div>
       </article>
+    </div>
 
-      <article class="blueprint-card surface rounded-xl p-7 transition-transform duration-300 hover:-translate-y-1 hover:shadow-lift">
-        <span class="mono-label text-[10px] surface-2 rounded-full px-3 py-1 inline-block mb-5">Operations</span>
-        <h3 class="display-tight text-xl font-semibold mb-2">Reporting &amp; Workflow Automation</h3>
-        <p class="text-soft text-sm mb-5">Replace manual spreadsheet updates and status meetings with pipelines that pull, calculate, and report the numbers on their own schedule.</p>
-        <div class="flex flex-wrap gap-2">
-          <span class="mono-label text-[10px] text-muted border border-line rounded px-2 py-1">n8n</span>
-          <span class="mono-label text-[10px] text-muted border border-line rounded px-2 py-1">Supabase</span>
-          <span class="mono-label text-[10px] text-muted border border-line rounded px-2 py-1">Zapier</span>
-        </div>
-      </article>
+    <div id="ph-lightbox" class="hidden fixed inset-0 z-[100] items-center justify-center p-6" style="background-color: rgba(0,0,0,0.7);">
+      <div class="relative w-full max-w-xl md:max-w-2xl">
+        <button id="ph-lightbox-close" aria-label="Close larger preview" class="absolute -top-4 -right-4 w-9 h-9 rounded-full surface-2 flex items-center justify-center shadow-lift">
+          <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"></path></svg>
+        </button>
+        <img
+          src="brand_assets/projects/phleadgen_poster.svg"
+          alt="PH Lead Generator full diagram — automation workflow, stats, and target industries"
+          class="w-full max-h-[80vh] object-contain rounded-xl shadow-lift"
+          style="border: 1px solid var(--line);"
+        />
+      </div>
     </div>
   </section>
 
   <!-- ============ CONTACT ============ -->
   <section id="contact" class="max-w-6xl mx-auto px-6 md:px-10 py-20 md:py-28 border-t border-line reveal">
-    <div class="surface blueprint-card rounded-2xl p-10 md:p-16 text-center max-w-3xl mx-auto shadow-lift">
-      <div class="mono-label text-[11px] text-copper mb-4">Contact</div>
+    <div class="surface blueprint-card rounded-2xl p-8 md:p-16 text-center max-w-3xl mx-auto shadow-lift">
+      <div class="mono-label badge-yellow text-[11px] mb-3">Contact</div>
       <h2 class="display-tight text-3xl md:text-4xl font-semibold mb-4">Let's automate something.</h2>
       <p class="text-soft max-w-lg mx-auto mb-8">
-        Spending too much time on repetitive work? Share your current process, and I'll help you identify what can be automated to save time, reduce errors, and improve efficiency.
+        Spending too much time on repetitive work? Book a call and I'll help you identify what can be automated to save time, reduce errors, and improve efficiency.
       </p>
       <div class="flex flex-wrap items-center justify-center gap-4 mb-8">
-        <a href="mailto:sioconricky@gmail.com" class="btn-primary shadow-copper rounded-full px-6 py-3 text-sm font-medium">sioconricky@gmail.com</a>
         <a
           href="https://www.linkedin.com/in/ricky-siocon-82552228b/"
           target="_blank"
           rel="noopener noreferrer"
-          class="btn-primary shadow-copper rounded-full px-6 py-3 text-sm font-medium inline-flex items-center gap-2"
+          class="btn-ghost rounded-full px-6 py-3 text-sm font-medium inline-flex items-center gap-2"
         >
           <svg class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" /></svg>
           LinkedIn
+        </a>
+        <a
+          href="https://mail.google.com/mail/?view=cm&fs=1&to=sioconricky@gmail.com"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="btn-ghost rounded-full px-6 py-3 text-sm font-medium"
+        >sioconricky@gmail.com</a>
+        <a
+          href="https://calendly.com/sioconricky/30min"
+          class="btn-primary shadow-copper rounded-full px-6 py-3 text-sm font-medium inline-flex items-center gap-2"
+        >
+          <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="2" /><path d="M16 2v4M8 2v4M3 10h18" /><path d="M9.5 15l1.8 1.8L15 13.3" /></svg>
+          Book a call
         </a>
       </div>
     </div>
@@ -501,4 +656,24 @@
     );
     reveals.forEach(function (el) { io.observe(el); });
   }
+
+  var phEnlargeBtn = document.getElementById("ph-enlarge-btn");
+  var phLightbox = document.getElementById("ph-lightbox");
+  var phLightboxClose = document.getElementById("ph-lightbox-close");
+  function openPhLightbox() {
+    phLightbox.classList.remove("hidden");
+    phLightbox.classList.add("flex");
+  }
+  function closePhLightbox() {
+    phLightbox.classList.add("hidden");
+    phLightbox.classList.remove("flex");
+  }
+  phEnlargeBtn.addEventListener("click", openPhLightbox);
+  phLightbox.addEventListener("click", function (e) {
+    if (e.target === phLightbox) closePhLightbox();
+  });
+  phLightboxClose.addEventListener("click", closePhLightbox);
+  document.addEventListener("keydown", function (e) {
+    if (e.key === "Escape") closePhLightbox();
+  });
 </script>

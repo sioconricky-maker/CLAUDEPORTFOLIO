@@ -1,0 +1,843 @@
+<title>Lead Hunter Dashboard — Sample Report (Anonymized)</title>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<style>
+  :root {
+    --bg: #f5f7fa;
+    --surface: #ffffff;
+    --surface-2: #eef2f7;
+    --ink: #141a22;
+    --ink-2: #46505e;
+    --ink-3: #77818f;
+    --line: #dbe2ea;
+    --accent: #1e5fa8;
+    --accent-ink: #174b85;
+    --accent-soft: #e3edf8;
+    --track: #e6ebf2;
+    --good: #15803c;
+    --good-bg: #e2f3e7;
+    --amber: #a16207;
+    --amber-bg: #f8eed7;
+    --low: #77818f;
+    --low-bg: #eaedf1;
+    --hero-ring: #1e5fa8;
+    --shadow: 0 1px 2px rgba(20,26,34,.05), 0 4px 14px rgba(20,26,34,.06);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #10151c;
+      --surface: #171e27;
+      --surface-2: #1f2833;
+      --ink: #eef2f7;
+      --ink-2: #b4bdc9;
+      --ink-3: #828d9c;
+      --line: #2b3542;
+      --accent: #6da7e8;
+      --accent-ink: #8dbcf2;
+      --accent-soft: #1d2c40;
+      --track: #263140;
+      --good: #4cc272;
+      --good-bg: #16301f;
+      --amber: #e0a63f;
+      --amber-bg: #35290f;
+      --low: #828d9c;
+      --low-bg: #232c37;
+      --hero-ring: #6da7e8;
+      --shadow: 0 1px 2px rgba(0,0,0,.3), 0 4px 14px rgba(0,0,0,.25);
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #10151c;
+    --surface: #171e27;
+    --surface-2: #1f2833;
+    --ink: #eef2f7;
+    --ink-2: #b4bdc9;
+    --ink-3: #828d9c;
+    --line: #2b3542;
+    --accent: #6da7e8;
+    --accent-ink: #8dbcf2;
+    --accent-soft: #1d2c40;
+    --track: #263140;
+    --good: #4cc272;
+    --good-bg: #16301f;
+    --amber: #e0a63f;
+    --amber-bg: #35290f;
+    --low: #828d9c;
+    --low-bg: #232c37;
+    --hero-ring: #6da7e8;
+    --shadow: 0 1px 2px rgba(0,0,0,.3), 0 4px 14px rgba(0,0,0,.25);
+  }
+  :root[data-theme="light"] {
+    --bg: #f5f7fa;
+    --surface: #ffffff;
+    --surface-2: #eef2f7;
+    --ink: #141a22;
+    --ink-2: #46505e;
+    --ink-3: #77818f;
+    --line: #dbe2ea;
+    --accent: #1e5fa8;
+    --accent-ink: #174b85;
+    --accent-soft: #e3edf8;
+    --track: #e6ebf2;
+    --good: #15803c;
+    --good-bg: #e2f3e7;
+    --amber: #a16207;
+    --amber-bg: #f8eed7;
+    --low: #77818f;
+    --low-bg: #eaedf1;
+    --hero-ring: #1e5fa8;
+    --shadow: 0 1px 2px rgba(20,26,34,.05), 0 4px 14px rgba(20,26,34,.06);
+  }
+
+  * { box-sizing: border-box; }
+  html, body { background: var(--bg); }
+  body {
+    margin: 0;
+    color: var(--ink);
+    font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+    font-size: 15px;
+    line-height: 1.55;
+    overflow-x: hidden;
+  }
+
+  .wrap {
+    max-width: 1060px;
+    margin: 0 auto;
+    padding: 32px 20px 64px;
+    display: flex;
+    flex-direction: column;
+    gap: 28px;
+  }
+
+  h1, h2, h3 { margin: 0; text-wrap: balance; line-height: 1.2; }
+  h1 { font-size: 27px; font-weight: 700; letter-spacing: -0.01em; }
+  h2 { font-size: 19px; font-weight: 650; }
+  h3 { font-size: 16px; font-weight: 650; }
+  p { margin: 0; }
+
+  .eyebrow {
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.09em;
+    color: var(--ink-3);
+  }
+  .num { font-variant-numeric: tabular-nums; }
+
+  a { color: var(--accent-ink); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+  a:focus-visible, summary:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+    border-radius: 4px;
+  }
+
+  /* ---------- header ---------- */
+  header.masthead { display: flex; flex-direction: column; gap: 10px; }
+  .masthead .meta { display: flex; flex-wrap: wrap; gap: 8px 18px; color: var(--ink-2); font-size: 13.5px; }
+  .masthead .meta strong { color: var(--ink); font-weight: 600; }
+  .verdict-line {
+    display: inline-flex;
+    align-items: baseline;
+    gap: 10px;
+    background: var(--accent-soft);
+    border-left: 3px solid var(--accent);
+    padding: 10px 16px;
+    border-radius: 6px;
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--ink);
+    width: fit-content;
+    max-width: 100%;
+  }
+
+  /* ---------- cards ---------- */
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    box-shadow: var(--shadow);
+    padding: 22px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .hero { border-top: 4px solid var(--hero-ring); gap: 16px; }
+  .hero-top { display: flex; flex-wrap: wrap; align-items: flex-start; gap: 14px 20px; justify-content: space-between; }
+  .hero-id { display: flex; flex-direction: column; gap: 4px; min-width: 240px; flex: 1; }
+  .hero-id .sub { color: var(--ink-2); font-size: 13.5px; }
+
+  .score-block { display: flex; flex-direction: column; gap: 6px; min-width: 220px; flex: 1; max-width: 340px; }
+  .score-row { display: flex; align-items: baseline; gap: 8px; }
+  .score-big { font-size: 40px; font-weight: 750; letter-spacing: -0.02em; color: var(--good); }
+  .score-max { color: var(--ink-3); font-size: 14px; }
+  .meter { height: 10px; border-radius: 999px; background: var(--track); overflow: hidden; }
+  .meter > span { display: block; height: 100%; border-radius: 999px; background: var(--good); }
+
+  .hero-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  .panel {
+    background: var(--surface-2);
+    border-radius: 8px;
+    padding: 12px 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    font-size: 14px;
+    color: var(--ink-2);
+  }
+  .panel .eyebrow { color: var(--ink-3); }
+  .panel.full { grid-column: 1 / -1; }
+  .panel .body { color: var(--ink); }
+
+  /* score badge pill */
+  .badge {
+    display: inline-flex;
+    align-items: baseline;
+    gap: 4px;
+    padding: 4px 12px;
+    border-radius: 999px;
+    font-weight: 700;
+    font-size: 16px;
+    line-height: 1.3;
+  }
+  .badge small { font-size: 11px; font-weight: 600; opacity: .75; }
+  .t-hi  { background: var(--good-bg);  color: var(--good); }
+  .t-mid { background: var(--amber-bg); color: var(--amber); }
+  .t-low { background: var(--low-bg);   color: var(--low); }
+
+  /* breakdown bars */
+  .bars { display: grid; grid-template-columns: 58px 1fr 52px; gap: 6px 10px; align-items: center; font-size: 12.5px; }
+  .bars .lbl { color: var(--ink-3); text-transform: uppercase; letter-spacing: .06em; font-size: 10.5px; font-weight: 600; }
+  .bars .val { color: var(--ink-2); text-align: right; }
+  .bar { height: 7px; background: var(--track); border-radius: 999px; overflow: hidden; }
+  .bar > span { display: block; height: 100%; border-radius: 999px; background: var(--accent); }
+
+  /* pain chips */
+  .chips { display: flex; flex-wrap: wrap; gap: 6px; }
+  .chip {
+    background: var(--surface-2);
+    border: 1px solid var(--line);
+    color: var(--ink-2);
+    border-radius: 999px;
+    padding: 3px 11px;
+    font-size: 12.5px;
+    line-height: 1.45;
+  }
+  .tag-unverified {
+    display: inline-block;
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: .07em;
+    color: var(--amber);
+    background: var(--amber-bg);
+    border-radius: 4px;
+    padding: 1px 6px;
+    vertical-align: 1px;
+    margin-left: 5px;
+  }
+
+  /* lead grid */
+  .lead-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+  .lead-head { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; }
+  .lead-head .who { display: flex; flex-direction: column; gap: 3px; }
+  .lead-head .sub { color: var(--ink-3); font-size: 12.5px; }
+  .lead-verdict { font-size: 13.5px; color: var(--ink-2); }
+
+  /* battle card details */
+  details.battle {
+    border-top: 1px solid var(--line);
+    padding-top: 10px;
+    margin-top: 2px;
+  }
+  details.battle summary {
+    cursor: pointer;
+    font-size: 13px;
+    font-weight: 650;
+    color: var(--accent-ink);
+    list-style: none;
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    user-select: none;
+  }
+  details.battle summary::-webkit-details-marker { display: none; }
+  details.battle summary::before {
+    content: "";
+    width: 7px; height: 7px;
+    border-right: 2px solid var(--accent-ink);
+    border-bottom: 2px solid var(--accent-ink);
+    transform: rotate(-45deg);
+    transition: transform .15s ease;
+    flex: none;
+  }
+  details.battle[open] summary::before { transform: rotate(45deg); }
+  details.battle .bc {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    padding-top: 12px;
+    font-size: 13.5px;
+    color: var(--ink-2);
+  }
+  .bc .sect { display: flex; flex-direction: column; gap: 4px; }
+  .bc .sect .body { color: var(--ink); }
+  .bc blockquote {
+    margin: 0;
+    padding: 8px 12px;
+    background: var(--surface-2);
+    border-left: 3px solid var(--accent);
+    border-radius: 0 6px 6px 0;
+    color: var(--ink);
+    font-style: italic;
+  }
+  .bc .obj { display: flex; flex-direction: column; gap: 3px; padding: 8px 12px; background: var(--surface-2); border-radius: 6px; }
+  .bc .obj .q { font-weight: 650; color: var(--ink); font-style: italic; }
+  .bc ul { margin: 0; padding-left: 18px; display: flex; flex-direction: column; gap: 4px; }
+
+  /* stats strip */
+  .stats {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 14px;
+  }
+  .stat {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 14px 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  .stat .v { font-size: 26px; font-weight: 720; letter-spacing: -0.01em; color: var(--ink); }
+  .stat .v.accent { color: var(--accent-ink); }
+  .stat .d { font-size: 12px; color: var(--ink-3); }
+  .funnel-arrow { color: var(--ink-3); font-weight: 400; font-size: 18px; }
+
+  /* rest table */
+  .table-wrap { overflow-x: auto; border: 1px solid var(--line); border-radius: 12px; background: var(--surface); box-shadow: var(--shadow); }
+  table { border-collapse: collapse; width: 100%; min-width: 640px; font-size: 13.5px; }
+  th, td { padding: 10px 16px; text-align: left; vertical-align: top; }
+  thead th {
+    font-size: 10.5px;
+    text-transform: uppercase;
+    letter-spacing: .08em;
+    color: var(--ink-3);
+    font-weight: 650;
+    border-bottom: 1px solid var(--line);
+    white-space: nowrap;
+  }
+  tbody tr + tr td { border-top: 1px solid var(--line); }
+  td.score-cell { white-space: nowrap; }
+  td .badge { font-size: 13px; padding: 2px 10px; }
+  td.name { font-weight: 600; color: var(--ink); white-space: nowrap; }
+  td.v { color: var(--ink-2); min-width: 320px; }
+
+  .section-head { display: flex; flex-direction: column; gap: 4px; }
+  .section-head .sub { color: var(--ink-3); font-size: 13px; }
+
+  @media (max-width: 820px) {
+    .lead-grid { grid-template-columns: 1fr; }
+    .hero-grid { grid-template-columns: 1fr; }
+    .stats { grid-template-columns: repeat(2, 1fr); }
+    .stat.wide { grid-column: 1 / -1; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    details.battle summary::before { transition: none; }
+  }
+</style>
+
+<div class="wrap">
+
+  <div style="background:var(--amber-bg); border:1px solid var(--amber); color:var(--amber); border-radius:8px; padding:12px 16px; font-size:13px; font-weight:600;">
+    Sample output, anonymized for public display — company names, URLs, phone numbers, and emails have been redacted or replaced with placeholders. Scoring, analysis, and messaging are unedited.
+  </div>
+
+  <!-- ============ HEADER ============ -->
+  <header class="masthead">
+    <p class="eyebrow">Lead Hunter · Run 2026-07-11</p>
+    <h1>PH SMB Lead Report — AI Automation Prospects</h1>
+    <div class="meta">
+      <span><strong>Niche:</strong> PH SMBs needing AI automation — marketing, real estate, e-commerce, accounting, logistics</span>
+      <span><strong>Coverage:</strong> Metro Manila · Cebu · Davao</span>
+      <span><strong>Run date:</strong> <span class="num">2026-07-11</span></span>
+    </div>
+    <p class="verdict-line">5 qualified leads — Lead #1 (Logistics) tops the list.</p>
+  </header>
+
+  <!-- ============ HERO: #1 LEAD ============ -->
+  <section class="card hero" aria-label="Lead 1 — top pick">
+    <div class="hero-top">
+      <div class="hero-id">
+        <p class="eyebrow">#1 Lead · Call First</p>
+        <h2>Lead #1 — Logistics &amp; Warehousing</h2>
+        <p class="sub">Logistics / Warehousing · Davao City (HQ Makati) · <span style="color:var(--ink-3)">[company site redacted]</span></p>
+      </div>
+      <div class="score-block">
+        <div class="score-row">
+          <span class="score-big num">90</span><span class="score-max num">/ 100</span>
+        </div>
+        <div class="meter" role="img" aria-label="Score 90 out of 100"><span style="width:90%"></span></div>
+        <div class="bars">
+          <span class="lbl">Pain</span><span class="bar"><span style="width:90%"></span></span><span class="val num">36/40</span>
+          <span class="lbl">Budget</span><span class="bar"><span style="width:80%"></span></span><span class="val num">20/25</span>
+          <span class="lbl">Reach</span><span class="bar"><span style="width:100%"></span></span><span class="val num">20/20</span>
+          <span class="lbl">Fit</span><span class="bar"><span style="width:93%"></span></span><span class="val num">14/15</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="chips">
+      <span class="chip">Hiring Outbound Encoder + SAP Encoder roles in Davao</span>
+      <span class="chip">17 open jobs at once — growth strain</span>
+      <span class="chip">Encoder JD requires manual WMS/SAP data entry of shipment records</span>
+    </div>
+
+    <div class="hero-grid">
+      <div class="panel full">
+        <span class="eyebrow">Why now</span>
+        <p class="body">Three independent verified pain signals — they are literally paying multiple humans to type shipment data into SAP — plus a verified phone line and a document-heavy workflow that is a textbook Claude+n8n OCR pipeline.</p>
+      </div>
+      <div class="panel">
+        <span class="eyebrow">Opening hook</span>
+        <p class="body">"Napansin ko po na you're hiring Outbound Encoders and SAP Encoders in Davao right now — I help logistics companies get shipment documents typed into SAP automatically, so those roles stop being a permanent hiring headache every time volume grows."</p>
+      </div>
+      <div class="panel">
+        <span class="eyebrow">Week-one quick win</span>
+        <p class="body">An AI document-reading pipeline (Claude + n8n) for ONE document type — say, outbound delivery receipts or supplier waybills — extracting shipment fields into a clean, validated file ready for SAP/WMS upload. No SAP integration risk yet; it just replaces the typing, and their existing encoder becomes the checker instead of the typist.</p>
+      </div>
+      <div class="panel full">
+        <span class="eyebrow">Contact channel</span>
+        <p class="body"><strong>Landline first: <span class="num">[redacted]</span></strong> (verified on their own contact page) — a 1997-vintage Makati-HQ corporate operator, so a professional call asking for the Operations or Warehouse Manager fits their culture better than FB. Call mid-morning Tue–Thu; follow up via their site contact form referencing the call.</p>
+      </div>
+    </div>
+
+    <details class="battle">
+      <summary>Full battle card — headache, value math, objections</summary>
+      <div class="bc">
+        <div class="sect">
+          <span class="eyebrow">The headache (in their words)</span>
+          <blockquote>"Every time we win a new account or volume goes up, kailangan na naman mag-hire ng encoder. Training takes weeks, they resign, may typo sa waybill tapos si client pa ang nag-complain. Ang dami naming binabayaran para lang mag-type ng data na nasa papel na naman."</blockquote>
+        </div>
+        <div class="sect">
+          <span class="eyebrow">Value framing</span>
+          <p class="body">Each dedicated encoder is roughly ₱15–20k/month plus benefits, and they are hiring for multiple encoder seats at once — easily ₱35–50k/month of pure typing labor, before counting the cost of encoding errors on client shipments. The automation pays for itself even at one seat, and it never resigns during peak season.</p>
+        </div>
+        <div class="sect">
+          <span class="eyebrow">Bigger picture</span>
+          <ul>
+            <li>Direct posting into SAP/WMS via API or RPA once extraction accuracy is proven, removing the upload step entirely</li>
+            <li>Automated shipment-status notifications to clients (email/Viber) triggered from WMS events, replacing manual encode-then-email updates</li>
+            <li>Exception dashboard that flags mismatched or incomplete shipment docs before they become client disputes</li>
+          </ul>
+        </div>
+        <div class="sect">
+          <span class="eyebrow">Objections</span>
+          <div class="obj">
+            <span class="q">"We already have SAP — hindi ba redundant yan?"</span>
+            <span>Hindi po — SAP is where the data lives, but somebody still types it in. This sits BEFORE SAP: it reads the paper/PDF and prepares the entry. Your SAP stays exactly as is; we just remove the manual typing in front of it.</span>
+          </div>
+          <div class="obj">
+            <span class="q">"Our documents are messy — handwriting, different formats per client. Kakayanin ba ng AI?"</span>
+            <span>That's exactly why we start with one document type for one week — para makita niyo mismo the accuracy on YOUR actual documents before you commit to anything. If it can't hit the accuracy bar on the pilot, you've lost nothing.</span>
+          </div>
+        </div>
+        <div class="sect">
+          <span class="eyebrow">Credibility detail</span>
+          <p class="body">Established late 1990s as a joint venture with a multinational logistics partner, later rebranded after that partner's exit; contract logistics for cold chain, pharma, FMCG and retail clients — multinational-grade clients expect accurate, timely shipment data, which strengthens the error-cost angle. Size estimate 50–200 staff.<span class="tag-unverified">unverified</span></p>
+        </div>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ LEADS 2–5 ============ -->
+  <div class="section-head">
+    <h2>Leads 2–5</h2>
+    <p class="sub">Score rubric: pain /40 · budget /25 · reach /20 · fit /15. Expand each battle card for the pitch.</p>
+  </div>
+
+  <div class="lead-grid">
+
+    <!-- ===== Lead 2 · 81 ===== -->
+    <section class="card" aria-label="Lead 2">
+      <div class="lead-head">
+        <div class="who">
+          <h3>Lead #2 — Accounting &amp; Bookkeeping</h3>
+          <p class="sub">Accounting / Bookkeeping · Talisay City, Cebu · <span style="color:var(--ink-3)">[company site redacted]</span></p>
+        </div>
+        <span class="badge t-hi num">81<small>/100</small></span>
+      </div>
+      <div class="bars">
+        <span class="lbl">Pain</span><span class="bar"><span style="width:65%"></span></span><span class="val num">26/40</span>
+        <span class="lbl">Budget</span><span class="bar"><span style="width:84%"></span></span><span class="val num">21/25</span>
+        <span class="lbl">Reach</span><span class="bar"><span style="width:100%"></span></span><span class="val num">20/20</span>
+        <span class="lbl">Fit</span><span class="bar"><span style="width:93%"></span></span><span class="val num">14/15</span>
+      </div>
+      <div class="chips">
+        <span class="chip">4 branch offices — growing multi-branch footprint</span>
+        <span class="chip">High-volume repetitive MSME compliance filings</span>
+        <span class="chip">"100 staff, 5,000+ clients" — scaling with headcount, Gmail comms despite owning a domain</span>
+      </div>
+      <p class="lead-verdict"><strong>Verdict:</strong> Biggest verified budget in the batch (claimed 100 staff, 4 branches, 5,000+ clients scaling by headcount), verified email/phone AND a named CEO, with 5,000 clients of recurring BIR filings that map directly onto n8n workflow automation.</p>
+      <details class="battle">
+        <summary>Battle card — hook, quick win, objections, channel</summary>
+        <div class="bc">
+          <div class="sect">
+            <span class="eyebrow">Opening hook</span>
+            <blockquote>"Hi there — I came across your firm: 100 staff, four branches, 5,000+ clients, and you even built your own job-queue portal. You're clearly the builder type, so I'll be direct: I help firms like yours make every BIR deadline run itself instead of hiring another batch of staff every filing season."</blockquote>
+          </div>
+          <div class="sect">
+            <span class="eyebrow">The headache</span>
+            <p class="body">"Every 2551Q, 1701Q, VAT deadline — buong opisina naka-overtime. We keep hiring more staff kasi dumadami ang clients, pero the work is the same steps repeated 5,000 times: chase the client for documents, encode, prepare the form, file, send confirmation. Growth means more people, more branches, more payroll."</p>
+          </div>
+          <div class="sect">
+            <span class="eyebrow">Week-one quick win</span>
+            <p class="body">An automated client document-chaser and deadline tracker on top of their existing job-queue portal — n8n watches the BIR calendar per client type, auto-sends reminders (email/Messenger) to clients whose documents haven't arrived, and gives staff a live board of who's complete vs. who's holding up filing. No touching their filing process yet — it just kills the manual follow-up work.</p>
+          </div>
+          <div class="sect">
+            <span class="eyebrow">Value framing</span>
+            <p class="body">With 5,000+ clients on recurring BIR deadlines, even 15 minutes of follow-up per client per quarter is roughly 1,250 staff-hours — around 8 full-time staff (₱120–160k/month in Cebu wages) doing nothing but chasing and checking. Automating just the chasing recovers a big slice of that without letting a single client deadline slip.</p>
+          </div>
+          <div class="sect">
+            <span class="eyebrow">Objections</span>
+            <div class="obj">
+              <span class="q">"We already built our own portals — kaya namin gawin ito internally."</span>
+              <span>And that's exactly why this will work here — sasakay lang kami sa portal na ginawa niyo, hindi papalitan. Building the AI/automation layer is a different specialty from building forms; I do the plumbing so your team stays focused on clients. You keep ownership of everything.</span>
+            </div>
+            <div class="obj">
+              <span class="q">"BIR work is sensitive — baka magkamali ang AI sa filing ng client."</span>
+              <span>Agree po, kaya the AI never files anything. Week one is reminders and tracking only — zero filing risk. Even later, automation prepares and your CPAs review and approve. The signature stays human; only the typing and chasing get automated.</span>
+            </div>
+          </div>
+          <div class="sect">
+            <span class="eyebrow">Contact channel</span>
+            <p class="body">Email the <strong>CEO</strong> directly at <span class="num">[redacted]</span> (published on their own site), then follow up via <span class="num">[redacted]</span>. They publish their own email — they want to be contacted. Avoid the FB page for first touch; this is a peer-to-peer conversation between service-firm owners. MBA background — lead with growth economics (cost per client served), not tech.</p>
+          </div>
+        </div>
+      </details>
+    </section>
+
+    <!-- ===== Lead 3 · 76 ===== -->
+    <section class="card" aria-label="Lead 3">
+      <div class="lead-head">
+        <div class="who">
+          <h3>Lead #3 — Consumer Goods Distribution / E-commerce</h3>
+          <p class="sub">Consumer Goods Distribution / E-commerce · Binondo, Manila · <span style="color:var(--ink-3)">[company site redacted]</span></p>
+        </div>
+        <span class="badge t-mid num">76<small>/100</small></span>
+      </div>
+      <div class="bars">
+        <span class="lbl">Pain</span><span class="bar"><span style="width:65%"></span></span><span class="val num">26/40</span>
+        <span class="lbl">Budget</span><span class="bar"><span style="width:68%"></span></span><span class="val num">17/25</span>
+        <span class="lbl">Reach</span><span class="bar"><span style="width:100%"></span></span><span class="val num">20/20</span>
+        <span class="lbl">Fit</span><span class="bar"><span style="width:87%"></span></span><span class="val num">13/15</span>
+      </div>
+      <div class="chips">
+        <span class="chip">Hiring e-commerce staff/interns to run marketplace ops</span>
+        <span class="chip">Legacy family trading business (since 1958) going online</span>
+        <span class="chip">Corporate site has an EXPIRED SSL cert next to a newer Shopify store</span>
+        <span class="chip">Top company hiring e-com customer service in Manila</span>
+      </div>
+      <p class="lead-verdict"><strong>Verdict:</strong> 68-year-old national distributor with verified email and phone, actively hiring humans to run marketplace ops by hand — multi-channel order sync and B2B order intake are exactly what n8n does, and the budget of an established distributor is behind it.</p>
+      <details class="battle">
+        <summary>Battle card — hook, quick win, objections, channel</summary>
+        <div class="bc">
+          <div class="sect">
+            <span class="eyebrow">Opening hook</span>
+            <blockquote>"I saw your brand running on Shopify plus your official Lazada store, and that you've been hiring e-commerce staff to keep the marketplaces running — I help distributors like you make orders and inventory sync themselves across Shopee, Lazada and your own store, so your team stops copy-pasting between tabs."</blockquote>
+          </div>
+          <div class="sect">
+            <span class="eyebrow">The headache</span>
+            <p class="body">"Since 1958 kaming nagbebenta, pero itong online — ibang mundo. Ang staff namin buong araw nagli-lipat ng orders from Lazada to our system, ina-update ang stock sa tatlong platform isa-isa, sumasagot sa 'available pa po ba?' messages. Kapag nag-flash sale, nagkakagulo ang inventory at may na-oversell na naman."</p>
+          </div>
+          <div class="sect">
+            <span class="eyebrow">Week-one quick win</span>
+            <p class="body">Automated order-capture and stock-sync via n8n between their Shopify store and one marketplace (Lazada or Shopee) — new orders flow into a single consolidated sheet/system automatically, and stock updates in one place push to both channels. Ends the daily manual re-encoding for the two biggest channels first.</p>
+          </div>
+          <div class="sect">
+            <span class="eyebrow">Value framing</span>
+            <p class="body">Manual marketplace ops is roughly one full-time e-commerce staff per channel — ₱18–25k/month each in Manila. Sync automation handles all channels at once, and one prevented oversell weekend during a Lazada campaign (refunds, cancellations, seller-rating damage) can be worth more than the monthly fee by itself.</p>
+          </div>
+          <div class="sect">
+            <span class="eyebrow">Objections</span>
+            <div class="obj">
+              <span class="q">"May third-party seller tools naman for Lazada/Shopee — bakit kayo?"</span>
+              <span>Totoo po, and if an off-the-shelf tool fits, sasabihin ko sa inyo — mas mura yun. Where I come in: connecting the marketplaces to YOUR side — your warehouse process, your B2B distribution, your Shopify — which those tools don't do. We start small precisely to find out what you actually need before you pay for anything big.</span>
+            </div>
+            <div class="obj">
+              <span class="q">"Baka masira ang listings or inventory namin kapag in-automate."</span>
+              <span>Kaya week one runs in read-and-report mode muna — it watches and consolidates without touching your live listings. Only when the numbers match your manual process for a week do we let it write stock updates, one channel at a time.</span>
+            </div>
+          </div>
+          <div class="sect">
+            <span class="eyebrow">Contact channel</span>
+            <p class="body">Email <span class="num">[redacted]</span> (verified on their own locations page) with a subject referencing their marketplace operations, then follow up by phone <span class="num">[redacted]</span>. A Binondo trading house answers its landline; the email creates the paper trail for whoever owns e-commerce. FB only as fallback. Size estimate 50–200 staff.<span class="tag-unverified">unverified</span></p>
+          </div>
+        </div>
+      </details>
+    </section>
+
+    <!-- ===== Lead 4 · 75 ===== -->
+    <section class="card" aria-label="Lead 4">
+      <div class="lead-head">
+        <div class="who">
+          <h3>Lead #4 — Digital Marketing Agency</h3>
+          <p class="sub">Digital Marketing Agency · Marikina, Metro Manila · <span style="color:var(--ink-3)">[company site redacted]</span></p>
+        </div>
+        <span class="badge t-mid num">75<small>/100</small></span>
+      </div>
+      <div class="bars">
+        <span class="lbl">Pain</span><span class="bar"><span style="width:60%"></span></span><span class="val num">24/40</span>
+        <span class="lbl">Budget</span><span class="bar"><span style="width:72%"></span></span><span class="val num">18/25</span>
+        <span class="lbl">Reach</span><span class="bar"><span style="width:100%"></span></span><span class="val num">20/20</span>
+        <span class="lbl">Fit</span><span class="bar"><span style="width:87%"></span></span><span class="val num">13/15</span>
+      </div>
+      <div class="chips">
+        <span class="chip">Hiring Project Coordinator — MS Office, "tight deadlines"</span>
+        <span class="chip">Also hiring Accounts Executives — manual client coordination load</span>
+        <span class="chip">Agency since 2002 juggling SEO, web dev, social, PPC lines</span>
+      </div>
+      <p class="lead-verdict"><strong>Verdict:</strong> 24-year-old Google Partner agency with verified phones/email that is hiring coordinators to assemble reports in MS Office — automated client reporting is a high-retention retainer pitch to a firm that can clearly pay one.</p>
+      <details class="battle">
+        <summary>Battle card — hook, quick win, objections, channel</summary>
+        <div class="bc">
+          <div class="sect">
+            <span class="eyebrow">Opening hook</span>
+            <blockquote>"You've been running this agency since 2002 and you're hiring a Project Coordinator who's strong in MS Office and can 'work around tight deadlines' — in my experience that job posting usually means someone will spend half their week assembling client reports by hand. I automate exactly that for agencies."</blockquote>
+          </div>
+          <div class="sect">
+            <span class="eyebrow">The headache</span>
+            <p class="body">"Every end of month, deadline hell: pulling numbers from Google Ads, Analytics, Facebook, ranking tools, pasting into decks and Excel per client, tapos may isang client na late na naman ang report. My best people spend days formatting slides instead of doing strategy, and I'm hiring another coordinator just to keep up."</p>
+          </div>
+          <div class="sect">
+            <span class="eyebrow">Week-one quick win</span>
+            <p class="body">Automated monthly client reporting for their top 5 retainer clients — n8n pulls SEO/PPC/social metrics on schedule, Claude writes the plain-English performance summary in the agency's voice, and a branded report lands in the account team's inbox for review before sending. The coordinator role shifts from assembling to reviewing.</p>
+          </div>
+          <div class="sect">
+            <span class="eyebrow">Value framing</span>
+            <p class="body">A Project Coordinator in Metro Manila runs ₱20–28k/month, and report assembly typically eats 30–50% of that role across an agency's client base. Automating reporting for even 15–20 retainer clients recovers roughly one full hire — and as a Google Partner they know the pitch: their people should sell and strategize, not copy-paste.</p>
+          </div>
+          <div class="sect">
+            <span class="eyebrow">Objections</span>
+            <div class="obj">
+              <span class="q">"We're a tech agency — we can build this ourselves."</span>
+              <span>Kaya niyo talaga — pero your devs are billable on client projects, at ang internal tools laging napag-iiwanan sa priority list. I do only this, it's live in a week, and it's a fraction of one coordinator's salary. If you'd rather build it in-house after seeing mine working, fine din — you'll at least know exactly what to build.</span>
+            </div>
+            <div class="obj">
+              <span class="q">"Our clients expect a human touch in reports — baka generic ang AI output."</span>
+              <span>The AI drafts, your account manager edits and sends — clients never receive anything unreviewed. In practice the drafts are written from YOUR data in YOUR template and tone, so the human touch moves to insight and recommendations, which is the part clients actually value.</span>
+            </div>
+          </div>
+          <div class="sect">
+            <span class="eyebrow">Contact channel</span>
+            <p class="body">Call the sales line <span class="num">[redacted]</span> (verified on their site) and ask who owns operations/delivery — agencies answer their sales lines fast. Note: their published HR/verification contact is not sales — use it only to ask for the right person. Weekday afternoons; first week of the month is ideal, when the reporting pain is fresh. Third-party revenue estimates support the budget case.<span class="tag-unverified">unverified</span></p>
+          </div>
+        </div>
+      </details>
+    </section>
+
+    <!-- ===== Lead 5 · 74 ===== -->
+    <section class="card" aria-label="Lead 5">
+      <div class="lead-head">
+        <div class="who">
+          <h3>Lead #5 — Heavy Equipment Retail / Distribution</h3>
+          <p class="sub">Heavy Equipment Retail / Distribution · Davao City · <span style="color:var(--ink-3)">[company site redacted]</span></p>
+        </div>
+        <span class="badge t-mid num">74<small>/100</small></span>
+      </div>
+      <div class="bars">
+        <span class="lbl">Pain</span><span class="bar"><span style="width:90%"></span></span><span class="val num">36/40</span>
+        <span class="lbl">Budget</span><span class="bar"><span style="width:80%"></span></span><span class="val num">20/25</span>
+        <span class="lbl">Reach</span><span class="bar"><span style="width:30%"></span></span><span class="val num">6/20</span>
+        <span class="lbl">Fit</span><span class="bar"><span style="width:80%"></span></span><span class="val num">12/15</span>
+      </div>
+      <div class="chips">
+        <span class="chip">Hiring data-entry staff to "input and update lead data using spreadsheets"</span>
+        <span class="chip">23 open jobs across Davao, Cebu, Northern Mindanao</span>
+        <span class="chip">Lead management in spreadsheets, not a CRM</span>
+      </div>
+      <p class="lead-verdict"><strong>Verdict:</strong> Pain is as good as it gets — their own job ad says sales leads are typed into spreadsheets while they expand across 3 regions — but the only verified channel is Facebook Messenger, so plan outreach through the FB page and expect friction reaching a decision maker. <span class="tag-unverified">FB is the only verified channel</span></p>
+      <details class="battle">
+        <summary>Battle card — hook, quick win, objections, channel</summary>
+        <div class="bc">
+          <div class="sect">
+            <span class="eyebrow">Opening hook</span>
+            <blockquote>"Congrats on your recent regional expansion news — expansion talaga. I also noticed you're hiring data entry staff to type lead data into spreadsheets while you grow across Davao, Cebu and Northern Mindanao; I help dealers make every website and FB inquiry land in one system automatically, with zero encoding."</blockquote>
+          </div>
+          <div class="sect">
+            <span class="eyebrow">The headache</span>
+            <p class="body">"Ang daming inquiries galing sa FB, sa website, sa mga agents — pero nakakalat sa spreadsheets. May nag-inquire about an excavator two weeks ago, walang naka-follow up kasi hindi na-encode agad, at hindi ko alam kung ilan pa ang na-miss namin. Bawat branch may sariling file, walang isang totoong picture ng pipeline."</p>
+          </div>
+          <div class="sect">
+            <span class="eyebrow">Week-one quick win</span>
+            <p class="body">Automated lead capture — n8n catches every website quote-request and FB page inquiry the moment it arrives, Claude extracts the buyer details and equipment interest, and it lands structured in one shared pipeline (their ERPNext, or a clean sheet/CRM to start) with an instant alert to the right branch's sales team. The spreadsheet-encoding step disappears on day one.</p>
+          </div>
+          <div class="sect">
+            <span class="eyebrow">Value framing</span>
+            <p class="body">The data-entry role they're advertising is ₱14–18k/month in Davao — but the real money is the leads themselves. On machines worth millions of pesos each, ONE inquiry that dies in a spreadsheet costs more than a year of this automation. Instant capture plus same-hour follow-up is the difference between quoting first and quoting never.</p>
+          </div>
+          <div class="sect">
+            <span class="eyebrow">Objections</span>
+            <div class="obj">
+              <span class="q">"Spreadsheets work fine for us — everyone knows how to use them."</span>
+              <span>Walang babaguhin sa spreadsheet skills ng team — the automation just fills the sheet (or your ERP) for them, instantly and without typos. Same familiar view, minus the typing and the two-day delay. Your salespeople get an alert the minute a lead arrives instead of when someone finishes encoding.</span>
+            </div>
+            <div class="obj">
+              <span class="q">"AI sounds expensive at komplikado for a dealership."</span>
+              <span>The week-one build is simpler than it sounds — it's plumbing, hindi robot. Fixed small fee, one week, and you measure it the way you measure a salesman: leads captured and response time. If it doesn't visibly beat the manual process in week one, hindi tayo tutuloy — walang lock-in.</span>
+            </div>
+          </div>
+          <div class="sect">
+            <span class="eyebrow">Contact channel</span>
+            <p class="body"><strong>Facebook Messenger only:</strong> <span style="color:var(--ink-3)">[FB page redacted]</span> — their sole verified channel, linked from their own site footer (site publishes no phone or email; quote-form URL 404'd). Open by congratulating them on their recent public expansion news — public, current, and shows you actually looked. Ask who handles sales operations and offer a 15-minute call. Expect one or two hops to a decision maker.</p>
+          </div>
+          <div class="sect">
+            <span class="eyebrow">Intel</span>
+            <p class="body">They run a live ERP instance — "spreadsheet lead management" likely means the ERP isn't being fed sales-lead data yet, so the pitch becomes "make your existing ERP actually capture leads," not "buy a new system." Authorized dealer for a major international equipment brand, confirming big-ticket unit economics. Size estimate 50–150 staff.<span class="tag-unverified">unverified</span></p>
+          </div>
+        </div>
+      </details>
+    </section>
+
+  </div>
+
+  <!-- ============ RUN STATS ============ -->
+  <div class="section-head">
+    <h2>Run stats</h2>
+  </div>
+  <div class="stats">
+    <div class="stat">
+      <span class="eyebrow">Found</span>
+      <span class="v num">23</span>
+      <span class="d">raw leads discovered</span>
+    </div>
+    <div class="stat">
+      <span class="eyebrow">Enriched</span>
+      <span class="v num">23 <span class="funnel-arrow">→</span></span>
+      <span class="d">dossiers built, contacts verified</span>
+    </div>
+    <div class="stat">
+      <span class="eyebrow">Qualified</span>
+      <span class="v accent num">5</span>
+      <span class="d">made the call list (21.7% of funnel)</span>
+    </div>
+    <div class="stat">
+      <span class="eyebrow">Avg top-5 score</span>
+      <span class="v num">79.2</span>
+      <span class="d">out of 100</span>
+    </div>
+    <div class="stat wide">
+      <span class="eyebrow">Strongest industry</span>
+      <span class="v" style="font-size:19px">Logistics</span>
+      <span class="d">holds the #1 slot (90) and the sharpest pain pattern — companies hiring humans to encode data</span>
+    </div>
+  </div>
+
+  <!-- ============ BELOW THE BAR ============ -->
+  <div class="section-head">
+    <h2>Below the bar — remaining 17 leads</h2>
+    <p class="sub">Scored but not called this run. 80+ green · 60–79 amber · below 60 muted.</p>
+  </div>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th scope="col">Lead</th>
+          <th scope="col">Score</th>
+          <th scope="col">Verdict</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="name">Lead #6 — Real Estate</td>
+          <td class="score-cell"><span class="badge t-mid num">68</span></td>
+          <td class="v">Good speed-to-lead automation story and verified phone/form, but pain is business-model inference rather than documented evidence, and size (40–100) is a guess — just edged out of the top 5.</td>
+        </tr>
+        <tr>
+          <td class="name">Lead #7 — Real Estate</td>
+          <td class="score-cell"><span class="badge t-mid num">67</span></td>
+          <td class="v">Verified founders and 4 offices, but no concrete manual-workflow evidence — "growth strain" is inferred, not observed. Strong second-wave call.</td>
+        </tr>
+        <tr>
+          <td class="name">Lead #8 — Marketing</td>
+          <td class="score-cell"><span class="badge t-mid num">66</span></td>
+          <td class="v">Verified email and decent budget signals, but every pain signal is an inference about influencer ops — no job ad, no complaint, no observed manual process.</td>
+        </tr>
+        <tr>
+          <td class="name">Lead #9 — Logistics</td>
+          <td class="score-cell"><span class="badge t-mid num">60</span></td>
+          <td class="v">Strong encoder-hiring pain and great doc-automation fit, but all contact data is from third-party directories with their own site down — capped at 60 for no verified contact channel; re-verify contacts and it jumps into call range.</td>
+        </tr>
+        <tr>
+          <td class="name">Lead #10 — Digital Agency</td>
+          <td class="score-cell"><span class="badge t-low num">59</span></td>
+          <td class="v">Fully verified contacts but pain signals are generic agency-workload inferences — nothing showing they feel the pain.</td>
+        </tr>
+        <tr>
+          <td class="name">Lead #11 — Marketing</td>
+          <td class="score-cell"><span class="badge t-low num">57</span></td>
+          <td class="v">Named founder and verified booking funnel, but they are the most automated lead in the batch — weakest pain case; pitch would be scaling ops, a harder sell.</td>
+        </tr>
+        <tr>
+          <td class="name">Lead #12 — Accounting</td>
+          <td class="score-cell"><span class="badge t-low num">55</span></td>
+          <td class="v">Perfect reachability (verified principal, email, phone) and good fit, but a 3-person practice is unlikely to sustain a retainer — budget kills it.</td>
+        </tr>
+        <tr>
+          <td class="name">Lead #13 — Accounting</td>
+          <td class="score-cell"><span class="badge t-low num">55</span></td>
+          <td class="v">Verified contacts and WhatsApp-first funnel, but 2–10 staff (guess) means thin budget; pain is inferred from the service list, not evidenced.</td>
+        </tr>
+        <tr>
+          <td class="name">Lead #14 — Real Estate</td>
+          <td class="score-cell"><span class="badge t-low num">50</span></td>
+          <td class="v">Richest contact profile in the batch, but a 2–5 person brokerage where one broker holds 91 of 92 listings has no retainer budget.</td>
+        </tr>
+        <tr>
+          <td class="name">Lead #15 — Accounting</td>
+          <td class="score-cell"><span class="badge t-low num">47</span></td>
+          <td class="v">Decent fit (already on Xero/QB) but contacts are directory-sourced with own site unfetchable, and 5–20 staff is a guess — too many unverified layers.</td>
+        </tr>
+        <tr>
+          <td class="name">Lead #16 — Real Estate</td>
+          <td class="score-cell"><span class="badge t-low num">47</span></td>
+          <td class="v">Verified solo broker with a hand-built static site — real pain, but a 1–5 person shop is a project sale at best, not a retainer client.</td>
+        </tr>
+        <tr>
+          <td class="name">Lead #17 — Real Estate</td>
+          <td class="score-cell"><span class="badge t-low num">47</span></td>
+          <td class="v">Fully verified solo broker, but solo means no budget capacity for recurring automation services.</td>
+        </tr>
+        <tr>
+          <td class="name">Lead #18 — Retail</td>
+          <td class="score-cell"><span class="badge t-low num">43</span></td>
+          <td class="v">Genuinely good pain (one entry-level human running five sales channels) but zero verifiable contact data of any kind — unreachable, capped, dead until someone finds a channel.</td>
+        </tr>
+        <tr>
+          <td class="name">Lead #19 — Real Estate</td>
+          <td class="score-cell"><span class="badge t-low num">43</span></td>
+          <td class="v">Verified veteran founder but vague pain signals and a tiny dated operation — low ceiling.</td>
+        </tr>
+        <tr>
+          <td class="name">Lead #20 — Real Estate</td>
+          <td class="score-cell"><span class="badge t-low num">41</span></td>
+          <td class="v">Two hand-maintained portals is real pain, but contacts are search-index "likely" only (site bot-blocks fetching) and the firm is a 2–10 person boutique.</td>
+        </tr>
+        <tr>
+          <td class="name">Lead #21 — Accounting</td>
+          <td class="score-cell"><span class="badge t-low num">31</span></td>
+          <td class="v">FB-only micro-practice with directory-scraped phones and inconsistent addresses — too small and too unverified.</td>
+        </tr>
+        <tr>
+          <td class="name">Lead #22 — Accounting</td>
+          <td class="score-cell"><span class="badge t-low num">22</span></td>
+          <td class="v">Near-empty Google Sites page with no contact info whatsoever — not a lead, just a name.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <p style="color:var(--ink-3);font-size:12px">Scoring rubric: pain 40 · budget 25 · reach 20 · fit 15. Guess-confidence claims counted at half value; no verified contact channel caps total at 60. Items marked <span class="tag-unverified" style="margin-left:0">unverified</span> are estimates or single-source claims, not confirmed facts.</p>
+
+</div>
