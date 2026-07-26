@@ -92,6 +92,15 @@ Keep navigation to a single page with anchor links unless the user asks for mult
 - Default to supporting both: honor `prefers-color-scheme` for the initial state, and provide a visible toggle that persists the user's choice (e.g. `localStorage`).
 - Every custom color, shadow, and gradient in the guardrails below needs a defined dark-mode counterpart — don't just invert brightness; re-check contrast in both modes.
 
+## Video Embeds
+
+- Lazy-load embedded videos (Loom, YouTube, etc.) same as images — don't let them block initial page load. Load the iframe `src` only on-scroll-into-view or on-click, with a static poster/thumbnail shown beforehand.
+- The poster/thumbnail is required, not optional — never leave a bare unstyled iframe as the only pre-interaction visual.
+- Give the embed the same card treatment as project screenshots (subtle border/shadow per the guardrails below) so it reads as part of the design, not a foreign widget.
+- No autoplay. Respect `prefers-reduced-motion` — playback starts only on explicit click regardless.
+- Check the embed in both light and dark mode — third-party players often default to a plain white background/frame that needs a wrapping container (matching border-radius and background) to avoid a jarring box in dark mode.
+- Add a descriptive `title` attribute on the iframe for screen readers (e.g. `title="Demo video: competitive-research-agent automation"`).
+
 ## Anti-Generic Guardrails
 
 - **Colors:** Never use default Tailwind palette (indigo-500, blue-600, etc.). Pick a custom accent color and derive from it.

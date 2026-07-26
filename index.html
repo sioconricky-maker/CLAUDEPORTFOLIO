@@ -135,6 +135,22 @@
   }
   .dark .grain { opacity: 0.06; }
 
+  /* Blueprint dot-grid — a faint engineering grid behind everything. Masked so
+     it's strongest up top and fades toward the edges, keeping it calm. Static
+     (no motion), sits below content and below the drifting signal lines. */
+  .bg-grid {
+    pointer-events: none;
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    background-image: radial-gradient(var(--line-strong) 1.1px, transparent 1.1px);
+    background-size: 30px 30px;
+    opacity: 0.4;
+    -webkit-mask-image: radial-gradient(130% 105% at 50% -5%, #000 42%, transparent 88%);
+    mask-image: radial-gradient(130% 105% at 50% -5%, #000 42%, transparent 88%);
+  }
+  .dark .bg-grid { opacity: 0.55; }
+
   .display-tight {
     font-family: "Space Grotesk", sans-serif;
     letter-spacing: -0.03em;
@@ -167,6 +183,42 @@
   }
   .shadow-lift {
     box-shadow: 0 1px 2px rgba(var(--shadow-rgb), 0.08), 0 20px 40px -18px rgba(var(--shadow-rgb), 0.35);
+  }
+
+  /* Hover: hero headshot lifts with a copper glow; the rings react in kind */
+  .hero-photo .hero-ring {
+    transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.5s ease;
+  }
+  .hero-photo-img {
+    transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.5s ease;
+  }
+  .hero-photo:hover .hero-photo-img {
+    transform: translateY(-5px) scale(1.02);
+    box-shadow: 0 1px 2px rgba(var(--shadow-rgb), 0.08), 0 28px 54px -18px rgba(201, 122, 56, 0.45);
+  }
+  .hero-photo:hover .hero-ring-1 { transform: scale(1.05); opacity: 1; }
+  .hero-photo:hover .hero-ring-2 { transform: scale(1.08); opacity: 0.75; }
+
+  /* Hover: lift the chip under the cursor (the marquee keeps scrolling) */
+  .marquee-track > span {
+    transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.25s ease, border-color 0.25s ease;
+  }
+  .marquee-track > span:hover {
+    transform: translateY(-3px);
+    border-color: var(--copper);
+    box-shadow: 0 10px 26px -12px rgba(var(--shadow-rgb), 0.4);
+  }
+
+  /* Hover: project poster image zooms gently inside its clipped card */
+  .card-zoom-img { transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1); }
+  .card-zoom:hover .card-zoom-img { transform: scale(1.05); }
+
+  @media (prefers-reduced-motion: reduce) {
+    .hero-photo:hover .hero-photo-img,
+    .hero-photo:hover .hero-ring-1,
+    .hero-photo:hover .hero-ring-2,
+    .marquee-track > span:hover,
+    .card-zoom:hover .card-zoom-img { transform: none; }
   }
 
   /* Blueprint corner brackets */
@@ -261,6 +313,208 @@
     .status-dot { animation: none; }
   }
 
+  /* Demo video — click-to-load poster */
+  /* the frame carries the ambient wash; the poster button sits on top of the
+     artwork so it stays the only clickable surface */
+  #demo-frame {
+    background:
+      radial-gradient(90% 70% at 50% 0%, rgba(201, 122, 56, 0.10), transparent 70%),
+      radial-gradient(70% 60% at 80% 100%, rgba(46, 139, 124, 0.10), transparent 70%),
+      var(--bg-elevated-2);
+  }
+  .dark #demo-frame {
+    background:
+      radial-gradient(90% 70% at 50% 0%, rgba(224, 149, 79, 0.14), transparent 70%),
+      radial-gradient(70% 60% at 80% 100%, rgba(95, 199, 184, 0.12), transparent 70%),
+      var(--bg-elevated-2);
+  }
+  .demo-poster {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    cursor: pointer;
+    background: transparent;
+    /* offsets the control into the clear field to the right of the sheet */
+    padding-left: 26%;
+  }
+  /* Poster artwork — an abstract of the brief a run produces. The card's flow
+     chain below already documents the process, so the poster carries the output
+     instead of restating it. Deliberately abstract: no invented figures. */
+  .demo-sheet {
+    position: absolute;
+    left: 7%;
+    width: 44%;
+    top: 50%;
+    padding: clamp(13px, 2.6%, 22px);
+    display: flex;
+    flex-direction: column;
+    gap: clamp(7px, 1.5%, 13px);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    background-color: var(--bg-elevated);
+    box-shadow:
+      0 2px 5px rgba(var(--shadow-rgb), 0.05),
+      0 30px 64px -26px rgba(var(--shadow-rgb), 0.34);
+    transform: translateY(-50%) rotate(-1.4deg);
+    pointer-events: none;
+  }
+  .sheet-eyebrow {
+    font-family: "IBM Plex Mono", monospace;
+    font-size: clamp(7px, 0.62vw, 9px);
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--copper);
+  }
+  .sheet-title {
+    font-family: "Space Grotesk", sans-serif;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    font-size: clamp(13px, 1.35vw, 19px);
+    line-height: 1.15;
+    color: var(--ink);
+  }
+  .sheet-rule {
+    height: 1px;
+    background-color: var(--line);
+    margin: clamp(4px, 1%, 10px) 0 clamp(2px, 0.6%, 6px);
+  }
+  .sheet-toc {
+    display: flex;
+    flex-direction: column;
+    gap: clamp(5px, 1.1%, 11px);
+  }
+  .sheet-toc li {
+    font-family: "Inter", sans-serif;
+    font-size: clamp(8px, 0.78vw, 11px);
+    line-height: 1.3;
+    color: var(--ink-soft);
+    display: flex;
+    align-items: baseline;
+    gap: 0.6em;
+  }
+  .sheet-toc li::before {
+    content: "";
+    flex: none;
+    width: 3px;
+    height: 3px;
+    border-radius: 50%;
+    background-color: var(--line-strong);
+  }
+  /* Below sm the sheet goes full-bleed and drops its contents list, so the play
+     control keeps a clear field instead of sitting on top of the type. */
+  @media (max-width: 639px) {
+    .demo-sheet { left: 8%; right: 8%; width: auto; top: 27%; }
+    .sheet-toc,
+    .sheet-rule { display: none; }
+    .demo-poster { padding-left: 0; padding-top: 28%; }
+  }
+  .demo-play-glyph {
+    position: relative;
+    width: 62px;
+    height: 62px;
+    border-radius: 999px;
+    background-color: var(--copper);
+    color: var(--copper-ink);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 1px 2px rgba(var(--shadow-rgb), 0.1), 0 16px 34px -12px rgba(201, 122, 56, 0.5);
+    transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+  .demo-poster:hover .demo-play-glyph,
+  .demo-poster:focus-visible .demo-play-glyph { transform: scale(1.08); }
+  .demo-poster:active .demo-play-glyph { transform: scale(1); }
+  .demo-poster:focus-visible { outline: 2px solid var(--copper); outline-offset: -4px; }
+  @media (prefers-reduced-motion: reduce) {
+    .demo-play-glyph { transition: none; }
+    .demo-poster:hover .demo-play-glyph,
+    .demo-poster:focus-visible .demo-play-glyph { transform: none; }
+  }
+
+  /* Workflow chain */
+  .flow {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  .flow-step { display: flex; align-items: center; gap: 0.5rem; }
+  .flow-step + .flow-step::before {
+    content: "";
+    flex: none;
+    width: 16px;
+    height: 1px;
+    background: linear-gradient(90deg, var(--line-strong), var(--copper));
+  }
+  .flow-node,
+  .flow-leaf {
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 11px;
+    line-height: 1.4;
+    letter-spacing: 0.03em;
+    color: var(--ink-soft);
+    background-color: var(--bg-elevated-2);
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    padding: 0.35rem 0.6rem;
+    white-space: nowrap;
+  }
+  .flow-leaf { border-left: 2px solid var(--copper); }
+  /* On narrow screens the row would wrap and strand a connector at the start of
+     a line — run the chain vertically instead. */
+  @media (max-width: 639px) {
+    .flow { flex-direction: column; align-items: flex-start; gap: 0.35rem; }
+    .flow-step { flex-direction: column; align-items: flex-start; gap: 0.35rem; }
+    .flow-step + .flow-step::before {
+      width: 1px;
+      height: 14px;
+      margin-left: 0.85rem;
+      background: linear-gradient(180deg, var(--line-strong), var(--copper));
+    }
+  }
+  /* Vertical variant: narrow cards would wrap the row and strand a connector. */
+  .flow.is-stacked,
+  .flow.is-stacked .flow-step { flex-direction: column; align-items: flex-start; gap: 0.35rem; }
+  .flow.is-stacked .flow-step + .flow-step::before {
+    width: 1px;
+    height: 14px;
+    margin-left: 0.85rem;
+    background: linear-gradient(180deg, var(--line-strong), var(--copper));
+  }
+  .flow-branch {
+    margin-top: 0.75rem;
+    padding-left: 0.9rem;
+    border-left: 1px solid var(--line-strong);
+  }
+  .flow-scheduled {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.6rem;
+    margin-top: 1rem;
+    padding-top: 0.9rem;
+    border-top: 1px dashed var(--line);
+    font-size: 12.5px;
+    line-height: 1.6;
+    color: var(--muted);
+  }
+  .flow-scheduled .status-dot { margin-top: 0.45rem; flex: none; }
+  .flow-code {
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 11.5px;
+    color: var(--ink-soft);
+    background-color: var(--bg-elevated-2);
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    padding: 0.05rem 0.35rem;
+    white-space: nowrap;
+  }
+
   /* Scroll reveal */
   .reveal {
     opacity: 0;
@@ -287,8 +541,13 @@
   }
   .marquee-track {
     width: max-content;
-    animation: marquee-scroll 32s linear infinite;
+    animation: marquee-scroll 18s linear infinite;
+    will-change: transform;
   }
+  /* Trailing margin on every item (instead of flex `gap`) so the last item of
+     each set also carries space. This makes the two duplicated sets identical
+     widths, so translateX(-50%) wraps seamlessly with no half-gap jump. */
+  .marquee-track > span { margin-right: 1rem; }
   @keyframes marquee-scroll {
     from { transform: translateX(0); }
     to { transform: translateX(-50%); }
@@ -297,6 +556,64 @@
     .marquee-track { animation: none; }
     .marquee-mask { overflow-x: auto; }
   }
+
+  /* Progressive disclosure: project detail folds away so the Work section stays
+     short. Native <details> — keyboard-operable, works with JS disabled. */
+  .detail-toggle {
+    border-top: 1px solid var(--line);
+    padding-top: 1rem;
+    margin-bottom: 1.25rem;
+  }
+  .detail-toggle > summary {
+    list-style: none;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    transition: color 0.25s ease;
+  }
+  .detail-toggle > summary::-webkit-details-marker { display: none; }
+  .detail-toggle > summary:hover { color: var(--copper); }
+  .detail-toggle > summary:focus-visible {
+    outline: 2px solid var(--copper);
+    outline-offset: 3px;
+    border-radius: 2px;
+  }
+  .detail-chevron {
+    width: 12px;
+    height: 12px;
+    flex: none;
+    transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .detail-toggle[open] .detail-chevron { transform: rotate(180deg); }
+  .detail-body { padding-top: 1.5rem; }
+  @media (prefers-reduced-motion: reduce) {
+    .detail-chevron { transition: none; }
+  }
+
+  /* Scroll progress — a signal line that fills as the page is read */
+  .scroll-progress {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 2px;
+    width: 100%;
+    transform: scaleX(0);
+    transform-origin: 0 50%;
+    background: linear-gradient(90deg, var(--copper), var(--teal));
+    z-index: 60;
+    will-change: transform;
+    pointer-events: none;
+  }
+
+  /* Active section link (scroll-spy) — reuses the nav underline */
+  .nav-link.active { color: var(--ink); }
+  .nav-link.active::after { width: 100%; }
 
   /* Section label badge */
   .badge-yellow {
@@ -322,9 +639,13 @@
   <rect width="100%" height="100%" filter="url(#noise)"></rect>
 </svg>
 
+<div class="bg-grid" aria-hidden="true"></div>
+
 <div class="bg-lines" aria-hidden="true">
   <i></i><i></i><i></i><i></i><i></i><i></i><i class="v"></i><i class="v"></i><i class="v"></i>
 </div>
+
+<div class="scroll-progress" id="scroll-progress" aria-hidden="true"></div>
 
 <!-- ============ NAV ============ -->
 <header class="fixed top-0 inset-x-0 z-50 backdrop-blur-md" style="background-color: color-mix(in srgb, var(--bg) 82%, transparent); border-bottom: 1px solid var(--line);">
@@ -367,23 +688,23 @@
           <h1 class="display-tight text-4xl sm:text-5xl md:text-6xl font-semibold leading-[1.05] mb-2">Ricky Siocon</h1>
           <div class="mono-label text-copper text-xs sm:text-sm mb-6">AI Automation Specialist</div>
           <p class="text-soft text-base md:text-lg mb-8">
-            I focus on automation — mainly with <span class="text-ink font-medium">Claude</span>, while exploring n8n and Zapier as alternatives. To prove I can build beyond automation, I shipped two browser games, Gridrunner and Deep Dive Fishing. I also bring working knowledge of Pinecone and Supabase for database and RAG-driven projects.
+            I build agents that finish the whole job, not one step of it — research a company, write the brief, file it, then hand it off to the right inbox, channel, and calendar without being asked twice. Mainly with <span class="text-ink font-medium">Claude</span>, while exploring n8n and Zapier as alternatives, plus Pinecone and Supabase for database and RAG-driven work.
           </p>
           <div class="flex flex-wrap items-center gap-4 mb-10">
             <a href="#work" class="btn-primary shadow-copper rounded-full px-6 py-3 text-sm font-medium">View my work</a>
             <a href="#contact" class="btn-ghost rounded-full px-6 py-3 text-sm font-medium">Get in touch</a>
           </div>
-          <div class="inline-flex items-center gap-2 mono-label text-[11px] surface-2 rounded-full px-3 py-1.5">
+          <a href="#contact" aria-label="Available for projects — get in touch" class="inline-flex items-center gap-2 mono-label text-[11px] surface-2 rounded-full px-3 py-1.5 transition-transform duration-200 hover:-translate-y-0.5 hover:text-copper">
             <span class="status-dot"></span> Available for projects
-          </div>
+          </a>
         </div>
-        <div class="relative z-10 shrink-0 mx-auto md:mx-0 mt-10 md:mt-0 w-fit">
-          <div class="absolute -inset-5 rounded-full border border-line-strong opacity-70" aria-hidden="true"></div>
-          <div class="absolute -inset-9 rounded-full border border-line opacity-40" aria-hidden="true"></div>
+        <div class="hero-photo relative z-10 shrink-0 mx-auto md:mx-0 mt-10 md:mt-0 w-fit">
+          <div class="hero-ring hero-ring-1 absolute -inset-5 rounded-full border border-line-strong opacity-70" aria-hidden="true"></div>
+          <div class="hero-ring hero-ring-2 absolute -inset-9 rounded-full border border-line opacity-40" aria-hidden="true"></div>
           <img
             src="brand_assets/myprofile.jpg"
             alt="Ricky Siocon"
-            class="relative w-40 h-40 sm:w-48 sm:h-48 md:w-64 md:h-64 lg:w-72 lg:h-72 rounded-full object-cover shadow-lift"
+            class="hero-photo-img relative w-40 h-40 sm:w-48 sm:h-48 md:w-64 md:h-64 lg:w-72 lg:h-72 rounded-full object-cover shadow-lift"
             style="border: 4px solid var(--bg);"
           />
         </div>
@@ -393,17 +714,16 @@
 
   <!-- ============ ABOUT ============ -->
   <section id="about" class="max-w-6xl mx-auto px-6 md:px-10 py-20 md:py-28 border-t border-line reveal">
-    <div class="grid md:grid-cols-[1fr_2fr] gap-10 md:gap-16">
+    <div class="grid md:grid-cols-[8rem_1fr] gap-4 md:gap-10">
       <div>
-        <div class="mono-label badge-yellow text-[11px] mb-3">About</div>
-        <h2 class="display-tight text-2xl md:text-3xl font-semibold leading-tight">I turn manual busywork into infrastructure.</h2>
+        <div class="mono-label badge-yellow text-[11px]">01 · About</div>
       </div>
-      <div class="space-y-6">
+      <div class="space-y-6 max-w-3xl">
         <p class="text-soft">
-          I'm an AI Automation Specialist passionate about building intelligent workflows and AI-powered solutions that help businesses automate repetitive tasks and improve efficiency.
+          Most automation stops one step short. It drafts the thing, then waits for you to file it, send it, and remember the follow-up. I build agents that carry a task all the way to done — research it, write it, deliver it to the right place, and set the reminder — without checking in at every step.
         </p>
         <p class="text-soft">
-          I enjoy turning complex problems into simple, scalable systems — through continuous learning and hands-on development.
+          In practice that means custom Claude automations wired into the tools teams already use — Google Workspace, Slack, and more. I bring in extra data stores and services when a job needs memory or retrieval. Both projects below run end to end — one of them on a schedule, with no prompt at all.
         </p>
       </div>
     </div>
@@ -412,12 +732,12 @@
   <!-- ============ STACK ============ -->
   <section id="stack" class="py-20 md:py-28 border-t border-line reveal overflow-hidden">
     <div class="max-w-6xl mx-auto px-6 md:px-10">
-      <div class="mono-label badge-yellow text-[11px] mb-3">Stack</div>
-      <h2 class="display-tight text-2xl md:text-3xl font-semibold leading-tight mb-10 max-w-xl">The stack I build with.</h2>
+      <div class="mono-label badge-yellow text-[11px] mb-3">02 · Stack</div>
+      <h2 class="display-tight text-2xl md:text-3xl font-semibold leading-tight mb-6 max-w-xl">The stack I use.</h2>
     </div>
 
     <div class="marquee-mask">
-      <div class="marquee-track flex items-center gap-4">
+      <div class="marquee-track flex items-center">
         <!-- set 1 -->
         <span class="blueprint-card surface-2 inline-flex items-center gap-2.5 text-sm md:text-base text-soft shrink-0 rounded-lg px-5 py-3"><img src="https://cdn.simpleicons.org/claude" alt="" class="w-5 h-5 shrink-0" />Claude AI</span>
         <span class="blueprint-card surface-2 inline-flex items-center gap-2.5 text-sm md:text-base text-soft shrink-0 rounded-lg px-5 py-3"><img src="https://cdn.jsdelivr.net/npm/simple-icons@15.0.0/icons/openai.svg" alt="" class="w-5 h-5 shrink-0 dark:invert" />ChatGPT</span>
@@ -439,37 +759,153 @@
   <!-- ============ WORK / PROJECTS + CAPABILITIES ============ -->
   <section id="work" class="max-w-6xl mx-auto px-6 md:px-10 py-20 md:py-28 border-t border-line reveal">
     <div class="mb-10">
-      <div class="mono-label badge-yellow text-[11px] mb-3">Work</div>
+      <div class="mono-label badge-yellow text-[11px] mb-3">03 · Work</div>
       <h2 class="display-tight text-2xl md:text-3xl font-semibold leading-tight max-w-xl mb-3">Featured projects.</h2>
-      <p class="text-muted text-sm max-w-lg">A multi-agent Claude skill for AI-automation research, plus two shipped games — built end to end, from mechanics to deployment.</p>
+      <p class="text-muted text-sm max-w-lg">Two multi-agent Claude builds — one that researches a competitor and delivers the brief itself, one that finds and scores automation opportunities.</p>
     </div>
 
-    <div class="grid md:grid-cols-3 gap-6">
-      <article class="blueprint-card surface rounded-xl overflow-hidden transition-transform duration-300 hover:-translate-y-1 hover:shadow-lift flex flex-col">
+    <div class="grid md:grid-cols-3 gap-6 md:items-start">
+      <!-- Featured: Competitive Research Agent (video demo + workflow) -->
+      <article class="blueprint-card surface rounded-xl overflow-hidden transition-transform duration-300 hover:-translate-y-1 hover:shadow-lift flex flex-col md:col-span-2">
+        <div id="demo-frame" class="relative w-full aspect-video border-b border-line overflow-hidden">
+          <div class="demo-sheet" aria-hidden="true">
+            <span class="sheet-eyebrow">Generated · Google Doc</span>
+            <span class="sheet-title">Competitive Brief</span>
+            <span class="sheet-rule"></span>
+            <ul class="sheet-toc">
+              <li>Overview</li>
+              <li>Competitor profile</li>
+              <li>Head-to-head comparison</li>
+              <li>SWOT summary</li>
+              <li>Actionable recommendations</li>
+            </ul>
+          </div>
+          <button
+            id="demo-play"
+            type="button"
+            class="demo-poster"
+            aria-label="Play the competitive research agent screen recording"
+          >
+            <span class="demo-play-glyph" aria-hidden="true">
+              <svg class="w-6 h-6 ml-0.5" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5.14v13.72a1 1 0 0 0 1.54.84l10.29-6.86a1 1 0 0 0 0-1.68L9.54 4.3A1 1 0 0 0 8 5.14Z" /></svg>
+            </span>
+            <span class="mono-label text-[10px] text-muted relative">Play screen recording</span>
+          </button>
+        </div>
+
+        <div class="p-6 flex flex-col flex-1">
+          <span class="mono-label text-[10px] surface-2 rounded-full px-3 py-1 inline-block mb-4 self-start">Claude Agent Workflow</span>
+          <h3 class="display-tight text-lg font-semibold mb-2">Competitive Research Agent</h3>
+          <p class="text-soft text-sm mb-6">Name a construction company and it does the rest — researches it live from the web, writes an actionable brief against your own business, and delivers itself to the tools your team already uses. No confirmation prompts once it starts.</p>
+
+          <!-- Workflow chain, folded away by default -->
+          <details class="detail-toggle mt-auto">
+            <summary>
+              How it runs
+              <svg class="detail-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6" /></svg>
+            </summary>
+            <div class="detail-body">
+              <ol class="flow">
+                <li class="flow-step"><span class="flow-node">Company name</span></li>
+                <li class="flow-step"><span class="flow-node">Live web research</span></li>
+                <li class="flow-step"><span class="flow-node">Google Doc brief</span></li>
+              </ol>
+              <div class="flow-branch">
+                <div class="mono-label text-[10px] text-muted mb-2">then, in parallel</div>
+                <div class="flex flex-wrap gap-2">
+                  <span class="flow-leaf">Gmail draft</span>
+                  <span class="flow-leaf">Slack&nbsp;#general</span>
+                  <span class="flow-leaf">Calendar +90 days</span>
+                </div>
+              </div>
+              <p class="flow-scheduled">
+                <span class="status-dot" aria-hidden="true"></span>
+                <span>Also runs unattended as <code class="flow-code">daily-competitor-scan</code> at 2:00&nbsp;PM PHT, finding a new contractor to cover each time — no company name needed.</span>
+              </p>
+              <div class="flex flex-wrap gap-2 mt-5">
+                <span class="mono-label text-[10px] text-muted border border-line rounded px-2 py-1">Claude Automation</span>
+                <span class="mono-label text-[10px] text-muted border border-line rounded px-2 py-1">Integrations</span>
+                <span class="mono-label text-[10px] text-muted border border-line rounded px-2 py-1">Google Workspace</span>
+                <span class="mono-label text-[10px] text-muted border border-line rounded px-2 py-1">Slack</span>
+              </div>
+            </div>
+          </details>
+
+          <div class="flex flex-wrap gap-2 mt-auto">
+            <a
+              href="https://app.supademo.com/video/cms11rat56yjgqmbl8s2dewxq"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="btn-ghost rounded-full px-4 py-2 text-sm font-medium inline-flex items-center justify-center gap-1.5"
+            >
+              Open recording
+              <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M7 7h10v10" /></svg>
+            </a>
+            <!-- Sample brief: doc must stay shared as "Anyone with the link → Viewer" or this 404s for visitors. -->
+            <a
+              href="https://docs.google.com/document/d/1KWdZBWtx3RkqHfB4v6snd6UyK4HvaimolSrAZ81VuXM/edit"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="btn-ghost rounded-full px-4 py-2 text-sm font-medium inline-flex items-center justify-center gap-1.5"
+            >
+              Sample brief
+              <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M7 7h10v10" /></svg>
+            </a>
+          </div>
+        </div>
+      </article>
+
+      <article class="card-zoom blueprint-card surface rounded-xl overflow-hidden transition-transform duration-300 hover:-translate-y-1 hover:shadow-lift flex flex-col">
         <img
           src="brand_assets/projects/phleadgen_poster.svg"
-          alt="PH Lead Generator diagram — automation workflow from input through n8n and Claude AI to reports"
-          class="w-full aspect-video object-cover border-b border-line"
+          alt="PH Lead Generator diagram — lead pipeline from niche and region through discovery, enrichment, and scoring to a ranked call list"
+          class="card-zoom-img w-full aspect-video object-cover border-b border-line"
           width="1600"
           height="1000"
         />
         <div class="p-6 flex flex-col flex-1">
-          <span class="mono-label text-[10px] surface-2 rounded-full px-3 py-1 inline-block mb-4 self-start">Claude Agent Skill</span>
+          <span class="mono-label text-[10px] surface-2 rounded-full px-3 py-1 inline-block mb-4 self-start">Claude Agent</span>
           <h3 class="display-tight text-lg font-semibold mb-2">PH Lead Generator</h3>
-          <p class="text-soft text-sm mb-5 flex-1">Built with 5 specialized Claude subagents — each with its own persona and role — that research, score, and validate AI-automation opportunities for Philippine businesses.</p>
-          <div class="flex flex-wrap gap-2 mb-5">
-            <span class="mono-label text-[10px] text-muted border border-line rounded px-2 py-1">Claude AI</span>
-            <span class="mono-label text-[10px] text-muted border border-line rounded px-2 py-1">n8n</span>
-            <span class="mono-label text-[10px] text-muted border border-line rounded px-2 py-1">Pinecone</span>
-            <span class="mono-label text-[10px] text-muted border border-line rounded px-2 py-1">Supabase</span>
-          </div>
+          <p class="text-soft text-sm mb-6">Five Claude subagents work a niche end to end — find Philippine SMBs showing real automation pain, build a dossier on each, verify the contact details, and score every lead out of 100. What comes back is a ranked call list with an opening line and a week-one quick win already written for the top five.</p>
+
+          <!-- Workflow chain, folded away by default -->
+          <details class="detail-toggle mt-auto">
+            <summary>
+              How it runs
+              <svg class="detail-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6" /></svg>
+            </summary>
+            <div class="detail-body">
+              <ol class="flow is-stacked">
+                <li class="flow-step"><span class="flow-node">Niche + region</span></li>
+                <li class="flow-step"><span class="flow-node">Discover leads</span></li>
+                <li class="flow-step"><span class="flow-node">Enrich &amp; verify contacts</span></li>
+                <li class="flow-step"><span class="flow-node">Score out of 100</span></li>
+                <li class="flow-step"><span class="flow-node">Ranked call list</span></li>
+              </ol>
+              <div class="flow-branch">
+                <div class="mono-label text-[10px] text-muted mb-2">scored on</div>
+                <div class="flex flex-wrap gap-2">
+                  <span class="flow-leaf">Pain 40</span>
+                  <span class="flow-leaf">Budget 25</span>
+                  <span class="flow-leaf">Reach 20</span>
+                  <span class="flow-leaf">Fit 15</span>
+                </div>
+              </div>
+              <p class="text-muted text-xs mt-4 leading-relaxed">Sample run, 11 Jul 2026: 23 leads found, all 23 enriched, 5 qualified — 21.7% of the funnel, average top-five score 79.2.</p>
+              <div class="flex flex-wrap gap-2 mt-5">
+                <span class="mono-label text-[10px] text-muted border border-line rounded px-2 py-1">Claude AI</span>
+                <span class="mono-label text-[10px] text-muted border border-line rounded px-2 py-1">Claude subagents</span>
+                <span class="mono-label text-[10px] text-muted border border-line rounded px-2 py-1">HTML report</span>
+              </div>
+            </div>
+          </details>
           <div class="flex flex-wrap gap-2">
             <button
               id="ph-enlarge-btn"
               type="button"
               class="btn-ghost rounded-full px-4 py-2 text-sm font-medium inline-flex items-center justify-center gap-1.5"
             >
-              Make it larger
+              View diagram
               <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7" /></svg>
             </button>
             <a
@@ -485,87 +921,17 @@
         </div>
       </article>
 
-      <article class="blueprint-card surface rounded-xl overflow-hidden transition-transform duration-300 hover:-translate-y-1 hover:shadow-lift flex flex-col">
-        <img
-          src="brand_assets/projects/gridrunner_poster.svg"
-          alt="Gridrunner title screen — a stick-figure runner mid-jump on a neon synthwave grid"
-          class="w-full aspect-video object-cover border-b border-line"
-          width="1600"
-          height="1000"
-        />
-        <div class="p-6 flex flex-col flex-1">
-          <span class="mono-label text-[10px] surface-2 rounded-full px-3 py-1 inline-block mb-4 self-start">Game</span>
-          <h3 class="display-tight text-lg font-semibold mb-2">Gridrunner</h3>
-          <p class="text-soft text-sm mb-5 flex-1">An endless signal run through a synthwave grid — jump, slide, and chain shield, decoy, and laser power-ups to survive.</p>
-          <div class="flex flex-wrap gap-2 mb-5">
-            <span class="mono-label text-[10px] text-muted border border-line rounded px-2 py-1">JavaScript</span>
-            <span class="mono-label text-[10px] text-muted border border-line rounded px-2 py-1">Canvas</span>
-            <span class="mono-label text-[10px] text-muted border border-line rounded px-2 py-1">Vercel</span>
-          </div>
-          <a
-            href="https://stickrunricky.vercel.app"
-            target="_blank"
-            rel="noopener noreferrer"
-            class="btn-ghost rounded-full px-4 py-2 text-sm font-medium inline-flex items-center justify-center gap-1.5 self-start"
-          >
-            Play now
-            <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M7 7h10v10" /></svg>
-          </a>
-        </div>
-      </article>
-
-      <article class="blueprint-card surface rounded-xl overflow-hidden transition-transform duration-300 hover:-translate-y-1 hover:shadow-lift flex flex-col">
-        <img
-          src="brand_assets/projects/deepdiver_poster.svg"
-          alt="Deep Dive Fishing title screen — a diver swimming underwater among fish near a boat"
-          class="w-full aspect-video object-cover border-b border-line"
-          width="1600"
-          height="1000"
-        />
-        <div class="p-6 flex flex-col flex-1">
-          <span class="mono-label text-[10px] surface-2 rounded-full px-3 py-1 inline-block mb-4 self-start">Game</span>
-          <h3 class="display-tight text-lg font-semibold mb-2">Deep Dive Fishing</h3>
-          <p class="text-soft text-sm mb-5 flex-1">An arcade diving-and-fishing game — manage oxygen, catch fish, and upgrade your gear on the way to the abyss.</p>
-          <div class="flex flex-wrap gap-2 mb-5">
-            <span class="mono-label text-[10px] text-muted border border-line rounded px-2 py-1">JavaScript</span>
-            <span class="mono-label text-[10px] text-muted border border-line rounded px-2 py-1">Canvas</span>
-            <span class="mono-label text-[10px] text-muted border border-line rounded px-2 py-1">Vercel</span>
-          </div>
-          <a
-            href="https://deep-dive-fishing.vercel.app/"
-            target="_blank"
-            rel="noopener noreferrer"
-            class="btn-ghost rounded-full px-4 py-2 text-sm font-medium inline-flex items-center justify-center gap-1.5 self-start"
-          >
-            Play now
-            <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M7 7h10v10" /></svg>
-          </a>
-        </div>
-      </article>
     </div>
 
-    <div id="ph-lightbox" class="hidden fixed inset-0 z-[100] items-center justify-center p-6" style="background-color: rgba(0,0,0,0.7);">
-      <div class="relative w-full max-w-xl md:max-w-2xl">
-        <button id="ph-lightbox-close" aria-label="Close larger preview" class="absolute -top-4 -right-4 w-9 h-9 rounded-full surface-2 flex items-center justify-center shadow-lift">
-          <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"></path></svg>
-        </button>
-        <img
-          src="brand_assets/projects/phleadgen_poster.svg"
-          alt="PH Lead Generator full diagram — automation workflow, stats, and target industries"
-          class="w-full max-h-[80vh] object-contain rounded-xl shadow-lift"
-          style="border: 1px solid var(--line);"
-        />
-      </div>
-    </div>
   </section>
 
   <!-- ============ CONTACT ============ -->
   <section id="contact" class="max-w-6xl mx-auto px-6 md:px-10 py-20 md:py-28 border-t border-line reveal">
     <div class="surface blueprint-card rounded-2xl p-8 md:p-16 text-center max-w-3xl mx-auto shadow-lift">
-      <div class="mono-label badge-yellow text-[11px] mb-3">Contact</div>
-      <h2 class="display-tight text-3xl md:text-4xl font-semibold mb-4">Let's automate something.</h2>
+      <div class="mono-label badge-yellow text-[11px] mb-3">04 · Contact</div>
+      <h2 class="display-tight text-3xl md:text-4xl font-semibold mb-4">Let's build an agent that finishes the job.</h2>
       <p class="text-soft max-w-lg mx-auto mb-8">
-        Spending too much time on repetitive work? Book a call and I'll help you identify what can be automated to save time, reduce errors, and improve efficiency.
+        I build AI agents that carry a task from start to done — research, write, deliver, follow up. Tell me the process that keeps landing back on your plate, and I'll tell you whether an agent can own it end to end.
       </p>
       <div class="flex flex-wrap items-center justify-center gap-4 mb-8">
         <a
@@ -585,6 +951,8 @@
         >sioconricky@gmail.com</a>
         <a
           href="https://calendly.com/sioconricky/30min"
+          target="_blank"
+          rel="noopener noreferrer"
           class="btn-primary shadow-copper rounded-full px-6 py-3 text-sm font-medium inline-flex items-center gap-2"
         >
           <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="2" /><path d="M16 2v4M8 2v4M3 10h18" /><path d="M9.5 15l1.8 1.8L15 13.3" /></svg>
@@ -602,6 +970,23 @@
     <a href="#top" class="nav-link mono-label text-[11px]">Back to top ↑</a>
   </div>
 </footer>
+
+<!-- PH Lead Generator diagram lightbox — kept at top level (outside any .reveal
+     section) so its `position: fixed` resolves against the viewport. A
+     transformed ancestor would otherwise trap it and offset it on mobile. -->
+<div id="ph-lightbox" class="hidden fixed inset-0 z-[100] items-center justify-center p-6" style="background-color: rgba(0,0,0,0.7);">
+  <div class="relative w-full max-w-xl md:max-w-2xl">
+    <button id="ph-lightbox-close" aria-label="Close larger preview" class="absolute -top-4 -right-4 w-9 h-9 rounded-full surface-2 flex items-center justify-center shadow-lift">
+      <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"></path></svg>
+    </button>
+    <img
+      src="brand_assets/projects/phleadgen_poster.svg"
+      alt="PH Lead Generator full diagram — lead pipeline, sample run stats, and the niche covered"
+      class="w-full max-h-[80vh] object-contain rounded-xl shadow-lift"
+      style="border: 1px solid var(--line);"
+    />
+  </div>
+</div>
 
 <script>
   var toggleBtn = document.getElementById("theme-toggle");
@@ -657,6 +1042,27 @@
     reveals.forEach(function (el) { io.observe(el); });
   }
 
+  // Demo video: load the embed only on click, so it never blocks first paint
+  var demoPlay = document.getElementById("demo-play");
+  if (demoPlay) {
+    demoPlay.addEventListener("click", function () {
+      var frame = document.getElementById("demo-frame");
+      var iframe = document.createElement("iframe");
+      iframe.src = "https://app.supademo.com/video/cms11rat56yjgqmbl8s2dewxq";
+      iframe.title = "Competitive research agent — screen recording";
+      iframe.loading = "lazy";
+      iframe.allow = "fullscreen; clipboard-write";
+      iframe.allowFullscreen = true;
+      iframe.className = "absolute inset-0 w-full h-full";
+      iframe.style.border = "0";
+      frame.appendChild(iframe);
+      demoPlay.remove();
+      var poster = frame.querySelector(".demo-sheet");
+      if (poster) poster.remove();
+      iframe.focus();
+    });
+  }
+
   var phEnlargeBtn = document.getElementById("ph-enlarge-btn");
   var phLightbox = document.getElementById("ph-lightbox");
   var phLightboxClose = document.getElementById("ph-lightbox-close");
@@ -675,5 +1081,36 @@
   phLightboxClose.addEventListener("click", closePhLightbox);
   document.addEventListener("keydown", function (e) {
     if (e.key === "Escape") closePhLightbox();
+  });
+
+  // Scroll progress bar — fills as the page is read
+  var progressBar = document.getElementById("scroll-progress");
+  function updateProgress() {
+    var doc = document.documentElement;
+    var max = doc.scrollHeight - doc.clientHeight;
+    var ratio = max > 0 ? doc.scrollTop / max : 0;
+    progressBar.style.transform = "scaleX(" + ratio + ")";
+  }
+  updateProgress();
+  window.addEventListener("scroll", updateProgress, { passive: true });
+  window.addEventListener("resize", updateProgress);
+
+  // Scroll-spy — highlight the nav link for the section currently in view
+  var navLinks = document.querySelectorAll(".nav-link");
+  var spyObserver = new IntersectionObserver(
+    function (entries) {
+      entries.forEach(function (entry) {
+        if (!entry.isIntersecting) return;
+        var id = entry.target.id;
+        navLinks.forEach(function (link) {
+          link.classList.toggle("active", link.getAttribute("href") === "#" + id);
+        });
+      });
+    },
+    { rootMargin: "-45% 0px -50% 0px", threshold: 0 }
+  );
+  ["about", "stack", "work", "contact"].forEach(function (id) {
+    var el = document.getElementById(id);
+    if (el) spyObserver.observe(el);
   });
 </script>
